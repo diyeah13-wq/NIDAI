@@ -1,0 +1,26 @@
+# Large data - never commit
+data/raw/
+data/processed/
+CIC-IDS2017*/
+UNSW-NB15*/
+
+# Generated artifacts
+models/
+results/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# OS / editor
+Desktop.ini
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/
