@@ -138,6 +138,37 @@ def build_group_documentation():
     return pd.DataFrame(rows)
 
 
+def build_group_markdown():
+    lines = ["# Feature groups (CIC-IDS2017)", ""]
+    lines.append("The 69 selected features are organised into 5 logical groups. "
+                 "Each group captures a different *type* of information about a "
+                 "network flow, which lets the multi-technique system study attack "
+                 "behaviour from complementary angles.")
+    lines.append("")
+    for group, meta in FEATURE_GROUPS.items():
+        lines.append("## %s (%d features)" % (group, len(meta["features"])))
+        lines.append("")
+        lines.append("_Group description:_ %s" % meta["description"])
+        lines.append("")
+        lines.append("_Why this group helps:_ %s" % GROUP_REASONS[group])
+        lines.append("")
+        lines.append("| Feature | Why selected |")
+        lines.append("|---|---|")
+        for f in meta["features"]:
+            tag, detail = REASON_BY_FEATURE.get(
+                f, ("-", "Included in the %s group." % group))
+            lines.append("| `%s` | %s |" % (f, detail))
+        lines.append("")
+    lines.append("## Dropped columns (%d)" % len(DROP_REASONS))
+    lines.append("")
+    lines.append("| Feature | Reason for dropping |")
+    lines.append("|---|---|")
+    for c, reason in DROP_REASONS.items():
+        lines.append("| `%s` | %s |" % (c, reason))
+    lines.append("")
+    return "\n".join(lines)
+
+
 def get_features(group=None):
     if group is None:
         return list(FEATURE_ORDER)
@@ -156,9 +187,14 @@ if __name__ == "__main__":
     doc = build_group_documentation()
     out = os.path.join(RESULTS_DIR, "feature_groups.csv")
     doc.to_csv(out, index=False)
+    md = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                      "docs")
+    os.makedirs(md, exist_ok=True)
+    with open(os.path.join(md, "feature_groups.md"), "w", encoding="utf-8") as fh:
+        fh.write(build_group_markdown())
     print("Features used in pipeline: %d" % len(FEATURE_ORDER))
     print("Features dropped: %d" % len(DROP_REASONS))
-    total = len(FEATURE_ORDER) + len(DROP_REASONS)
     print("Detailed documentation written to %s" % out)
+    print("Markdown report written to docs/feature_groups.md")
     for g, meta in FEATURE_GROUPS.items():
         print("  %-24s %d features  -  %s" % (g, len(meta["features"]), meta["description"]))
