@@ -13,6 +13,9 @@ PREDICTIONS_DIR = os.path.join(RESULTS_DIR, "predictions")
 RANDOM_STATE = 42
 TEST_SIZE = 0.20
 
+MODEL_SAMPLE_SIZE = 300_000
+MODEL_RARE_CLASSES = ["WebAttack", "Botnet", "BruteForce"]
+
 PROCESSED_CLEAN = os.path.join(DATA_PROCESSED, "cic_ids2017_cleaned.csv.gz")
 PROCESSED_TRAIN = os.path.join(DATA_PROCESSED, "train.csv.gz")
 PROCESSED_TEST = os.path.join(DATA_PROCESSED, "test.csv.gz")

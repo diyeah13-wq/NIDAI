@@ -1,0 +1,8 @@
+class,class_display,count,percent
+BENIGN,Normal (BENIGN),2148386,83.456
+DoS,DoS,193759,7.527
+DDoS,DDoS,128016,4.973
+PortScan,Port Scan,90855,3.529
+BruteForce,Brute Force,10622,0.413
+Botnet,Botnet,1953,0.076
+WebAttack,Web Attack,673,0.026

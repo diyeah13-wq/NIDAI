@@ -1,0 +1,159 @@
+{
+  "files": {
+    "Friday-WorkingHours-Afternoon-DDos": {
+      "encoding": "utf-8",
+      "rows": 225745,
+      "cols": 79,
+      "duplicates": 2633,
+      "missing_total": 4,
+      "inf_total": 64,
+      "missing_by_col": {
+        "Flow Bytes/s": 4
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 30,
+        "Flow Packets/s": 34
+      }
+    },
+    "Friday-WorkingHours-Afternoon-PortScan": {
+      "encoding": "utf-8",
+      "rows": 286467,
+      "cols": 79,
+      "duplicates": 72353,
+      "missing_total": 15,
+      "inf_total": 727,
+      "missing_by_col": {
+        "Flow Bytes/s": 15
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 356,
+        "Flow Packets/s": 371
+      }
+    },
+    "Friday-WorkingHours-Morning": {
+      "encoding": "utf-8",
+      "rows": 191033,
+      "cols": 79,
+      "duplicates": 6888,
+      "missing_total": 28,
+      "inf_total": 216,
+      "missing_by_col": {
+        "Flow Bytes/s": 28
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 94,
+        "Flow Packets/s": 122
+      }
+    },
+    "Monday-WorkingHours": {
+      "encoding": "utf-8",
+      "rows": 529918,
+      "cols": 79,
+      "duplicates": 26935,
+      "missing_total": 64,
+      "inf_total": 810,
+      "missing_by_col": {
+        "Flow Bytes/s": 64
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 373,
+        "Flow Packets/s": 437
+      }
+    },
+    "Thursday-WorkingHours-Afternoon-Infilteration": {
+      "encoding": "utf-8",
+      "rows": 288602,
+      "cols": 79,
+      "duplicates": 35630,
+      "missing_total": 18,
+      "inf_total": 396,
+      "missing_by_col": {
+        "Flow Bytes/s": 18
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 189,
+        "Flow Packets/s": 207
+      }
+    },
+    "Thursday-WorkingHours-Morning-WebAttacks": {
+      "encoding": "utf-8",
+      "rows": 170366,
+      "cols": 79,
+      "duplicates": 6066,
+      "missing_total": 20,
+      "inf_total": 250,
+      "missing_by_col": {
+        "Flow Bytes/s": 20
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 115,
+        "Flow Packets/s": 135
+      }
+    },
+    "Tuesday-WorkingHours": {
+      "encoding": "utf-8",
+      "rows": 445909,
+      "cols": 79,
+      "duplicates": 24065,
+      "missing_total": 201,
+      "inf_total": 327,
+      "missing_by_col": {
+        "Flow Bytes/s": 201
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 63,
+        "Flow Packets/s": 264
+      }
+    },
+    "Wednesday-workingHours": {
+      "encoding": "utf-8",
+      "rows": 692703,
+      "cols": 79,
+      "duplicates": 81909,
+      "missing_total": 1008,
+      "inf_total": 1586,
+      "missing_by_col": {
+        "Flow Bytes/s": 1008
+      },
+      "inf_by_col": {
+        "Flow Bytes/s": 289,
+        "Flow Packets/s": 1297
+      }
+    }
+  },
+  "classes": {
+    "DDoS": 128027,
+    "BENIGN": 2273097,
+    "PortScan": 158930,
+    "Bot": 1966,
+    "Infiltration": 36,
+    "Web Attack \ufffd Brute Force": 1507,
+    "Web Attack \ufffd XSS": 652,
+    "Web Attack \ufffd Sql Injection": 21,
+    "FTP-Patator": 7938,
+    "SSH-Patator": 5897,
+    "DoS Hulk": 231073,
+    "DoS GoldenEye": 10293,
+    "DoS slowloris": 5796,
+    "DoS Slowhttptest": 5499,
+    "Heartbleed": 11
+  },
+  "total": 2830743,
+  "constant_cols": [
+    "Bwd PSH Flags",
+    "Bwd URG Flags",
+    "Fwd Avg Bytes/Bulk",
+    "Fwd Avg Packets/Bulk",
+    "Fwd Avg Bulk Rate",
+    "Bwd Avg Bytes/Bulk",
+    "Bwd Avg Packets/Bulk",
+    "Bwd Avg Bulk Rate"
+  ],
+  "missing_cols": {
+    "Flow Bytes/s": 1358
+  },
+  "inf_cols": {
+    "Flow Bytes/s": 1509,
+    "Flow Packets/s": 2867
+  }
+}

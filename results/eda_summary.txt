@@ -1,0 +1,21 @@
+=== CIC-IDS2017 EDA (cleaned) ===
+Total samples: 2,574,264
+Selected features: 69
+
+Class distribution (7-class model target):
+  BENIGN: 2148386 (83.46%)
+  DoS: 193759 (7.53%)
+  DDoS: 128016 (4.97%)
+  PortScan: 90855 (3.53%)
+  BruteForce: 10622 (0.41%)
+  Botnet: 1953 (0.08%)
+  WebAttack: 673 (0.03%)
+
+Plots: results/plots/
+  class_distribution.png
+  correlation_heatmap.png
+  attack_relevance.png
+  feature_distributions.png
+
+Numeric stats : results/eda_numeric_summary.csv
+Class counts  : results/class_distribution.csv

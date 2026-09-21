@@ -6,8 +6,16 @@ UNSW-NB15*/
 
 # Generated artifacts
 models/
-results/
 logs/
+
+# results/: ignore heavy artifacts, track experiment metrics + summaries
+results/*
+!results/metrics/
+results/metrics/*
+!results/metrics/*.json
+!results/*.csv
+!results/*.json
+!results/*.txt
 
 # Python
 __pycache__/
