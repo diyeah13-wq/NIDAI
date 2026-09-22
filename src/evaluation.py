@@ -116,6 +116,28 @@ def plot_confusion_matrix(name, cm, labels):
     return out
 
 
+def plot_f1_comparison(name, labels, f1s, colors=None,
+                       title=None, ylim=(0.6, 1.0)):
+    """Bar chart of macro-F1 per system; saved to results/plots/<name>.png."""
+    if colors is None:
+        colors = ["#7f8c8d"] * len(labels)
+    fig, ax = plt.subplots(figsize=(max(6.5, 0.9 * len(labels)), 5))
+    bars = ax.bar(labels, f1s, color=colors)
+    ax.set_ylabel("macro F1 (test set)")
+    ax.set_ylim(*ylim)
+    ax.set_title(title or "Macro-F1 comparison")
+    for b, v in zip(bars, f1s):
+        ax.text(b.get_x() + b.get_width() / 2, v + 0.004, "%.3f" % v,
+                ha="center", va="bottom", fontsize=8)
+    ax.tick_params(axis="x", rotation=30)
+    ax.grid(axis="y", alpha=0.3)
+    fig.tight_layout()
+    out = os.path.join(os.path.dirname(METRICS_DIR), "plots", name + ".png")
+    fig.savefig(out, dpi=140)
+    plt.close(fig)
+    return out
+
+
 def print_table(metrics):
     head = "%-12s %8s %8s %8s %8s %8s" % ("class", "prec", "rec", "f1", "fpr", "sup")
     print(head)

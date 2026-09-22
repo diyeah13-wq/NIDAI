@@ -1,0 +1,169 @@
+{
+  "experiment": "fusion_stacked",
+  "accuracy": 0.9986,
+  "macro": {
+    "precision": 0.868,
+    "recall": 0.8728,
+    "f1": 0.8542
+  },
+  "weighted": {
+    "precision": 0.9986,
+    "recall": 0.9986,
+    "f1": 0.9986
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9998,
+      "recall": 0.9989,
+      "f1": 0.9993,
+      "fpr": 0.0013
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.998,
+      "recall": 0.998,
+      "f1": 0.998,
+      "fpr": 0.0002
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.9999,
+      "recall": 0.9995,
+      "f1": 0.9997,
+      "fpr": 0.0
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.9885,
+      "recall": 0.999,
+      "f1": 0.9937,
+      "fpr": 0.0004
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.9481,
+      "recall": 0.9882,
+      "f1": 0.9677,
+      "fpr": 0.0002
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.6916,
+      "recall": 0.9923,
+      "f1": 0.8151,
+      "fpr": 0.0003
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.45,
+      "recall": 0.1333,
+      "f1": 0.2057,
+      "fpr": 0.0
+    }
+  ],
+  "confusion_matrix": [
+    [
+      429223,
+      71,
+      3,
+      206,
+      0,
+      173,
+      1
+    ],
+    [
+      71,
+      38673,
+      0,
+      6,
+      2,
+      0,
+      0
+    ],
+    [
+      12,
+      1,
+      25590,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      11,
+      5,
+      0,
+      18153,
+      2,
+      0,
+      0
+    ],
+    [
+      4,
+      0,
+      0,
+      0,
+      2099,
+      0,
+      21
+    ],
+    [
+      3,
+      0,
+      0,
+      0,
+      0,
+      388,
+      0
+    ],
+    [
+      6,
+      0,
+      0,
+      0,
+      111,
+      0,
+      18
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "fusion": "stacked meta-learner (RF 200 trees, class_weight=balanced) on the 5 per-technique probability vectors",
+    "meta_features": "5 techniques x 7 classes = 35",
+    "out_of_fold_folds": 5,
+    "techniques": [
+      "Volume",
+      "Packet",
+      "Timing",
+      "TCP flags",
+      "Endpoint"
+    ],
+    "base_models": "per-group RandomForest (100 trees, same hyperparams and seed as Stage 5)",
+    "scaling": "none (tree thresholds are per-feature)",
+    "trained_on_rows": 300000,
+    "test_rows": 514853
+  }
+}

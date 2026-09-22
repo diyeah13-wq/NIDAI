@@ -1,0 +1,180 @@
+{
+  "experiment": "group_B_Packet_Statistics",
+  "accuracy": 0.8563,
+  "macro": {
+    "precision": 0.7027,
+    "recall": 0.9363,
+    "f1": 0.6839
+  },
+  "weighted": {
+    "precision": 0.9948,
+    "recall": 0.8563,
+    "f1": 0.9189
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9996,
+      "recall": 0.836,
+      "f1": 0.9105,
+      "fpr": 0.0015
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.9657,
+      "recall": 0.9205,
+      "f1": 0.9426,
+      "fpr": 0.0027
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.9975,
+      "recall": 0.9985,
+      "f1": 0.998,
+      "fpr": 0.0001
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.9722,
+      "recall": 0.9939,
+      "f1": 0.983,
+      "fpr": 0.001
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.9572,
+      "recall": 0.8522,
+      "f1": 0.9016,
+      "fpr": 0.0002
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.024,
+      "recall": 0.9974,
+      "f1": 0.0469,
+      "fpr": 0.0308
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.0023,
+      "recall": 0.9556,
+      "f1": 0.0046,
+      "fpr": 0.109
+    }
+  ],
+  "confusion_matrix": [
+    [
+      359222,
+      1267,
+      62,
+      515,
+      78,
+      15830,
+      52703
+    ],
+    [
+      77,
+      35672,
+      1,
+      1,
+      3,
+      0,
+      2998
+    ],
+    [
+      32,
+      0,
+      25564,
+      0,
+      0,
+      7,
+      0
+    ],
+    [
+      10,
+      0,
+      0,
+      18061,
+      0,
+      0,
+      100
+    ],
+    [
+      4,
+      0,
+      0,
+      0,
+      1810,
+      0,
+      310
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      390,
+      0
+    ],
+    [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0,
+      129
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "technique": "Packet",
+    "model": "RandomForest(n_estimators=100, max_features=sqrt, min_samples_leaf=2, class_weight=balanced)",
+    "features": 16,
+    "feature_names": [
+      "Fwd Packet Length Max",
+      "Fwd Packet Length Min",
+      "Fwd Packet Length Mean",
+      "Fwd Packet Length Std",
+      "Bwd Packet Length Max",
+      "Bwd Packet Length Min",
+      "Bwd Packet Length Mean",
+      "Bwd Packet Length Std",
+      "Min Packet Length",
+      "Max Packet Length",
+      "Packet Length Mean",
+      "Packet Length Std",
+      "Packet Length Variance",
+      "Average Packet Size",
+      "Avg Fwd Segment Size",
+      "Avg Bwd Segment Size"
+    ],
+    "trained_on_rows": 300000,
+    "test_rows": 514853,
+    "scaling": "none (tree thresholds are per-feature)",
+    "model_file": "models\\fusion\\B_Packet_Statistics.joblib"
+  }
+}

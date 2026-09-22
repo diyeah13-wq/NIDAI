@@ -1,0 +1,173 @@
+{
+  "experiment": "fusion_soft",
+  "accuracy": 0.9737,
+  "macro": {
+    "precision": 0.7241,
+    "recall": 0.9677,
+    "f1": 0.7271
+  },
+  "weighted": {
+    "precision": 0.9975,
+    "recall": 0.9737,
+    "f1": 0.9849
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9992,
+      "recall": 0.9699,
+      "f1": 0.9843,
+      "fpr": 0.0039
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.9955,
+      "recall": 0.9927,
+      "f1": 0.9941,
+      "fpr": 0.0004
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.9985,
+      "recall": 0.9988,
+      "f1": 0.9986,
+      "fpr": 0.0001
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.988,
+      "recall": 0.9977,
+      "f1": 0.9929,
+      "fpr": 0.0004
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.9879,
+      "recall": 0.8818,
+      "f1": 0.9318,
+      "fpr": 0.0
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.0342,
+      "recall": 0.9923,
+      "f1": 0.0662,
+      "fpr": 0.0213
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.0651,
+      "recall": 0.9407,
+      "f1": 0.1218,
+      "fpr": 0.0035
+    }
+  ],
+  "confusion_matrix": [
+    [
+      416741,
+      166,
+      39,
+      220,
+      23,
+      10940,
+      1548
+    ],
+    [
+      263,
+      38470,
+      0,
+      0,
+      0,
+      0,
+      19
+    ],
+    [
+      25,
+      0,
+      25572,
+      0,
+      0,
+      6,
+      0
+    ],
+    [
+      11,
+      6,
+      0,
+      18130,
+      0,
+      0,
+      24
+    ],
+    [
+      18,
+      0,
+      0,
+      0,
+      1873,
+      0,
+      233
+    ],
+    [
+      3,
+      0,
+      0,
+      0,
+      0,
+      388,
+      0
+    ],
+    [
+      8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      127
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "fusion": "soft voting (mean of 5 per-group predict_proba)",
+    "techniques": [
+      "Volume",
+      "Packet",
+      "Timing",
+      "TCP flags",
+      "Endpoint"
+    ],
+    "trained_on_rows": 300000,
+    "test_rows": 514853,
+    "models": {
+      "Volume": "models\\fusion\\A_Flow_Volume.joblib",
+      "Packet": "models\\fusion\\B_Packet_Statistics.joblib",
+      "Timing": "models\\fusion\\C_Timing_IAT.joblib",
+      "TCP flags": "models\\fusion\\D_TCP_Flags_Connection.joblib",
+      "Endpoint": "models\\fusion\\E_Endpoint_Window.joblib"
+    },
+    "scaling": "none (tree thresholds are per-feature)"
+  }
+}

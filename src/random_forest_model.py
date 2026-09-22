@@ -25,42 +25,19 @@ from sklearn.metrics import classification_report
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from config import (PROCESSED_TRAIN, PROCESSED_TEST, FEATURE_ORDER, CLASS_ORDER,
-                    RANDOM_STATE, MODEL_SAMPLE_SIZE, MODEL_RARE_CLASSES,
+from config import (FEATURE_ORDER, CLASS_ORDER,
+                    RANDOM_STATE, MODEL_SAMPLE_SIZE,
                     MODELS_DIR, PREDICTIONS_DIR, PLOTS_DIR)
+from common import load_train, load_test, rare_aware_sample
 from evaluation import (compute_metrics, save_experiment_metrics,
                         plot_confusion_matrix, print_table)
-
-
-def load_split(path):
-    df = pd.read_csv(path, usecols=FEATURE_ORDER + ["LabelGroup"],
-                     dtype={c: "float32" for c in FEATURE_ORDER})
-    df = df[df["LabelGroup"] != "UNKNOWN"]
-    y = df.pop("LabelGroup").map({c: i for i, c in enumerate(CLASS_ORDER)}).to_numpy()
-    return df[FEATURE_ORDER].to_numpy(np.float32), y, len(df)
-
-
-def rare_aware_sample(df, n):
-    rare_codes = [CLASS_ORDER.index(c) for c in MODEL_RARE_CLASSES]
-    rare = df[df["LabelGroup"].isin(rare_codes)]
-    rest = df[~df["LabelGroup"].isin(rare_codes)]
-    take = n - len(rare)
-    if take < len(rest):
-        n_rest = len(rest)
-        parts = []
-        for g, sub in rest.groupby("LabelGroup"):
-            parts.append(sub.sample(int(round(take * len(sub) / n_rest)),
-                                    random_state=RANDOM_STATE))
-        rest = pd.concat(parts, ignore_index=True)
-    sample = pd.concat([rare, rest]).sample(frac=1.0, random_state=RANDOM_STATE)
-    return sample
 
 
 def main():
     t0 = time.time()
     print("Loading train/test (float32)...", flush=True)
-    Xtr, ytr, ntr = load_split(PROCESSED_TRAIN)
-    Xte, yte, nte = load_split(PROCESSED_TEST)
+    Xtr, ytr, ntr = load_train()
+    Xte, yte, nte = load_test()
     print("train=%d rows  test=%d rows  features=%d" % (ntr, nte, len(FEATURE_ORDER)),
           flush=True)
 

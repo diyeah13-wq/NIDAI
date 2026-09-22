@@ -1,0 +1,175 @@
+{
+  "experiment": "group_D_TCP_Flags_Connection",
+  "accuracy": 0.5004,
+  "macro": {
+    "precision": 0.2945,
+    "recall": 0.5808,
+    "f1": 0.2699
+  },
+  "weighted": {
+    "precision": 0.8967,
+    "recall": 0.5004,
+    "f1": 0.6059
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9991,
+      "recall": 0.478,
+      "f1": 0.6466,
+      "fpr": 0.0022
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.5709,
+      "recall": 0.3969,
+      "f1": 0.4683,
+      "fpr": 0.0243
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.231,
+      "recall": 0.7137,
+      "f1": 0.349,
+      "fpr": 0.1243
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.2379,
+      "recall": 0.9875,
+      "f1": 0.3835,
+      "fpr": 0.1157
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.0169,
+      "recall": 0.17,
+      "f1": 0.0308,
+      "fpr": 0.0409
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.0038,
+      "recall": 0.3862,
+      "f1": 0.0076,
+      "fpr": 0.076
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.0019,
+      "recall": 0.9333,
+      "f1": 0.0037,
+      "fpr": 0.1304
+    }
+  ],
+  "confusion_matrix": [
+    [
+      205377,
+      11520,
+      42008,
+      47369,
+      20877,
+      39028,
+      63498
+    ],
+    [
+      181,
+      15382,
+      18795,
+      1270,
+      103,
+      2,
+      3019
+    ],
+    [
+      1,
+      31,
+      18272,
+      7296,
+      0,
+      0,
+      3
+    ],
+    [
+      1,
+      0,
+      19,
+      17943,
+      1,
+      0,
+      207
+    ],
+    [
+      5,
+      9,
+      2,
+      1430,
+      361,
+      69,
+      248
+    ],
+    [
+      0,
+      3,
+      2,
+      101,
+      0,
+      151,
+      134
+    ],
+    [
+      1,
+      0,
+      1,
+      4,
+      0,
+      3,
+      126
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "technique": "TCP flags",
+    "model": "RandomForest(n_estimators=100, max_features=sqrt, min_samples_leaf=2, class_weight=balanced)",
+    "features": 11,
+    "feature_names": [
+      "Fwd PSH Flags",
+      "Fwd URG Flags",
+      "FIN Flag Count",
+      "SYN Flag Count",
+      "RST Flag Count",
+      "PSH Flag Count",
+      "ACK Flag Count",
+      "URG Flag Count",
+      "CWE Flag Count",
+      "ECE Flag Count",
+      "Down/Up Ratio"
+    ],
+    "trained_on_rows": 300000,
+    "test_rows": 514853,
+    "scaling": "none (tree thresholds are per-feature)",
+    "model_file": "models\\fusion\\D_TCP_Flags_Connection.joblib"
+  }
+}

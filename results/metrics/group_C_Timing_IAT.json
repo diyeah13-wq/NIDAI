@@ -1,0 +1,186 @@
+{
+  "experiment": "group_C_Timing_IAT",
+  "accuracy": 0.9215,
+  "macro": {
+    "precision": 0.5781,
+    "recall": 0.8422,
+    "f1": 0.6323
+  },
+  "weighted": {
+    "precision": 0.9684,
+    "recall": 0.9215,
+    "f1": 0.9384
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9967,
+      "recall": 0.9131,
+      "f1": 0.9531,
+      "fpr": 0.0151
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.9705,
+      "recall": 0.9717,
+      "f1": 0.9711,
+      "fpr": 0.0024
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.978,
+      "recall": 0.9852,
+      "f1": 0.9816,
+      "fpr": 0.0012
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.3533,
+      "recall": 0.9337,
+      "f1": 0.5126,
+      "fpr": 0.0625
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.5564,
+      "recall": 0.9035,
+      "f1": 0.6887,
+      "fpr": 0.003
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.0554,
+      "recall": 0.6547,
+      "f1": 0.1021,
+      "fpr": 0.0085
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.1364,
+      "recall": 0.5333,
+      "f1": 0.2172,
+      "fpr": 0.0009
+    }
+  ],
+  "confusion_matrix": [
+    [
+      392352,
+      987,
+      395,
+      30814,
+      1444,
+      3332,
+      353
+    ],
+    [
+      872,
+      37656,
+      172,
+      41,
+      4,
+      4,
+      3
+    ],
+    [
+      221,
+      145,
+      25225,
+      10,
+      0,
+      2,
+      0
+    ],
+    [
+      126,
+      12,
+      0,
+      16966,
+      27,
+      1022,
+      18
+    ],
+    [
+      53,
+      2,
+      0,
+      62,
+      1919,
+      6,
+      82
+    ],
+    [
+      8,
+      0,
+      0,
+      127,
+      0,
+      256,
+      0
+    ],
+    [
+      4,
+      0,
+      0,
+      4,
+      55,
+      0,
+      72
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "technique": "Timing",
+    "model": "RandomForest(n_estimators=100, max_features=sqrt, min_samples_leaf=2, class_weight=balanced)",
+    "features": 22,
+    "feature_names": [
+      "Flow IAT Mean",
+      "Flow IAT Std",
+      "Flow IAT Max",
+      "Flow IAT Min",
+      "Fwd IAT Total",
+      "Fwd IAT Mean",
+      "Fwd IAT Std",
+      "Fwd IAT Max",
+      "Fwd IAT Min",
+      "Bwd IAT Total",
+      "Bwd IAT Mean",
+      "Bwd IAT Std",
+      "Bwd IAT Max",
+      "Bwd IAT Min",
+      "Active Mean",
+      "Active Std",
+      "Active Max",
+      "Active Min",
+      "Idle Mean",
+      "Idle Std",
+      "Idle Max",
+      "Idle Min"
+    ],
+    "trained_on_rows": 300000,
+    "test_rows": 514853,
+    "scaling": "none (tree thresholds are per-feature)",
+    "model_file": "models\\fusion\\C_Timing_IAT.joblib"
+  }
+}

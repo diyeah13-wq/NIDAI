@@ -1,0 +1,169 @@
+{
+  "experiment": "group_E_Endpoint_Window",
+  "accuracy": 0.9935,
+  "macro": {
+    "precision": 0.807,
+    "recall": 0.9721,
+    "f1": 0.8321
+  },
+  "weighted": {
+    "precision": 0.9965,
+    "recall": 0.9935,
+    "f1": 0.9949
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9999,
+      "recall": 0.9932,
+      "f1": 0.9965,
+      "fpr": 0.0004
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.9752,
+      "recall": 0.9975,
+      "f1": 0.9862,
+      "fpr": 0.0021
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.9989,
+      "recall": 0.9994,
+      "f1": 0.9992,
+      "fpr": 0.0001
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.9784,
+      "recall": 0.9977,
+      "f1": 0.988,
+      "fpr": 0.0008
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.9475,
+      "recall": 0.8842,
+      "f1": 0.9148,
+      "fpr": 0.0002
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.676,
+      "recall": 0.9923,
+      "f1": 0.8041,
+      "fpr": 0.0004
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.0731,
+      "recall": 0.9407,
+      "f1": 0.1357,
+      "fpr": 0.0031
+    }
+  ],
+  "confusion_matrix": [
+    [
+      426743,
+      953,
+      27,
+      400,
+      95,
+      186,
+      1273
+    ],
+    [
+      18,
+      38656,
+      0,
+      0,
+      0,
+      0,
+      78
+    ],
+    [
+      9,
+      7,
+      25587,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      3,
+      7,
+      0,
+      18129,
+      8,
+      0,
+      24
+    ],
+    [
+      1,
+      10,
+      0,
+      0,
+      1878,
+      0,
+      235
+    ],
+    [
+      3,
+      0,
+      0,
+      0,
+      0,
+      388,
+      0
+    ],
+    [
+      2,
+      5,
+      0,
+      0,
+      1,
+      0,
+      127
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "technique": "Endpoint",
+    "model": "RandomForest(n_estimators=100, max_features=sqrt, min_samples_leaf=2, class_weight=balanced)",
+    "features": 5,
+    "feature_names": [
+      "Destination Port",
+      "Init_Win_bytes_forward",
+      "Init_Win_bytes_backward",
+      "act_data_pkt_fwd",
+      "min_seg_size_forward"
+    ],
+    "trained_on_rows": 300000,
+    "test_rows": 514853,
+    "scaling": "none (tree thresholds are per-feature)",
+    "model_file": "models\\fusion\\E_Endpoint_Window.joblib"
+  }
+}
