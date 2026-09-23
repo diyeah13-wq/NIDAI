@@ -1,0 +1,126 @@
+{
+  "rf_webattack": {
+    "probability_source": "rf",
+    "support_test": 135,
+    "argmax": {
+      "recall": 0.5037,
+      "precision": 0.4444,
+      "f1": 0.4722,
+      "macro_f1": 0.8872
+    },
+    "best_f1": {
+      "threshold": 0.4,
+      "target_recall": 0.6963,
+      "target_precision": 0.4273,
+      "target_f1": 0.5296,
+      "overall_acc": 0.9983,
+      "macro_f1": 0.8947
+    },
+    "high_recall": {
+      "threshold": 0.14,
+      "target_recall": 0.9037,
+      "target_precision": 0.2729,
+      "target_f1": 0.4192,
+      "overall_acc": 0.998,
+      "macro_f1": 0.877
+    },
+    "saved": {
+      "best_f1": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_webattack_best_f1.json",
+      "high_recall": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_webattack_high_recall.json",
+      "argmax": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_webattack_argmax.json"
+    }
+  },
+  "rf_botnet": {
+    "probability_source": "rf",
+    "support_test": 391,
+    "argmax": {
+      "recall": 0.9642,
+      "precision": 0.6602,
+      "f1": 0.7838,
+      "macro_f1": 0.8872
+    },
+    "best_f1": {
+      "threshold": 0.65,
+      "target_recall": 0.9463,
+      "target_precision": 0.7075,
+      "target_f1": 0.8096,
+      "overall_acc": 0.9984,
+      "macro_f1": 0.8909
+    },
+    "high_recall": {
+      "threshold": 0.7,
+      "target_recall": 0.9258,
+      "target_precision": 0.7112,
+      "target_f1": 0.8044,
+      "overall_acc": 0.9984,
+      "macro_f1": 0.8901
+    },
+    "saved": {
+      "best_f1": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_botnet_best_f1.json",
+      "high_recall": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_botnet_high_recall.json",
+      "argmax": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_rf_botnet_argmax.json"
+    }
+  },
+  "hgbt_webattack": {
+    "probability_source": "hgbt",
+    "support_test": 135,
+    "argmax": {
+      "recall": 0.9111,
+      "precision": 0.3739,
+      "f1": 0.5302,
+      "macro_f1": 0.8909
+    },
+    "best_f1": {
+      "threshold": 0.69,
+      "target_recall": 0.8593,
+      "target_precision": 0.4158,
+      "target_f1": 0.5604,
+      "overall_acc": 0.9982,
+      "macro_f1": 0.8962
+    },
+    "high_recall": {
+      "threshold": 0.51,
+      "target_recall": 0.9037,
+      "target_precision": 0.3742,
+      "target_f1": 0.5293,
+      "overall_acc": 0.9981,
+      "macro_f1": 0.8907
+    },
+    "saved": {
+      "best_f1": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_webattack_best_f1.json",
+      "high_recall": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_webattack_high_recall.json",
+      "argmax": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_webattack_argmax.json"
+    }
+  },
+  "hgbt_botnet": {
+    "probability_source": "hgbt",
+    "support_test": 391,
+    "argmax": {
+      "recall": 0.9898,
+      "precision": 0.6344,
+      "f1": 0.7732,
+      "macro_f1": 0.8909
+    },
+    "best_f1": {
+      "threshold": 0.69,
+      "target_recall": 0.9872,
+      "target_precision": 0.6509,
+      "target_f1": 0.7846,
+      "overall_acc": 0.9981,
+      "macro_f1": 0.8926
+    },
+    "high_recall": {
+      "threshold": 0.53,
+      "target_recall": 0.9872,
+      "target_precision": 0.6349,
+      "target_f1": 0.7728,
+      "overall_acc": 0.9981,
+      "macro_f1": 0.8909
+    },
+    "saved": {
+      "best_f1": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_botnet_best_f1.json",
+      "high_recall": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_botnet_high_recall.json",
+      "argmax": "C:\\Users\\Lenovo\\Desktop\\PBL\\NIDAI\\results\\metrics\\rare_hgbt_botnet_argmax.json"
+    }
+  }
+}

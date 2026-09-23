@@ -1,0 +1,161 @@
+{
+  "experiment": "rare_hgbt_webattack_best_f1",
+  "accuracy": 0.9982,
+  "macro": {
+    "precision": 0.8578,
+    "recall": 0.968,
+    "f1": 0.8962
+  },
+  "weighted": {
+    "precision": 0.9985,
+    "recall": 0.9982,
+    "f1": 0.9983
+  },
+  "per_class": [
+    {
+      "class": "BENIGN",
+      "display": "Normal (BENIGN)",
+      "support": 429677,
+      "precision": 0.9999,
+      "recall": 0.9983,
+      "f1": 0.9991,
+      "fpr": 0.0004
+    },
+    {
+      "class": "DoS",
+      "display": "DoS",
+      "support": 38752,
+      "precision": 0.9937,
+      "recall": 0.9994,
+      "f1": 0.9965,
+      "fpr": 0.0005
+    },
+    {
+      "class": "DDoS",
+      "display": "DDoS",
+      "support": 25603,
+      "precision": 0.9998,
+      "recall": 0.9996,
+      "f1": 0.9997,
+      "fpr": 0.0
+    },
+    {
+      "class": "PortScan",
+      "display": "Port Scan",
+      "support": 18171,
+      "precision": 0.9884,
+      "recall": 0.9992,
+      "f1": 0.9938,
+      "fpr": 0.0004
+    },
+    {
+      "class": "BruteForce",
+      "display": "Brute Force",
+      "support": 2124,
+      "precision": 0.9724,
+      "recall": 0.9303,
+      "f1": 0.9509,
+      "fpr": 0.0001
+    },
+    {
+      "class": "Botnet",
+      "display": "Botnet",
+      "support": 391,
+      "precision": 0.6344,
+      "recall": 0.9898,
+      "f1": 0.7732,
+      "fpr": 0.0004
+    },
+    {
+      "class": "WebAttack",
+      "display": "Web Attack",
+      "support": 135,
+      "precision": 0.4158,
+      "recall": 0.8593,
+      "f1": 0.5604,
+      "fpr": 0.0003
+    }
+  ],
+  "confusion_matrix": [
+    [
+      428954,
+      241,
+      6,
+      210,
+      32,
+      223,
+      11
+    ],
+    [
+      9,
+      38729,
+      0,
+      4,
+      6,
+      0,
+      4
+    ],
+    [
+      9,
+      0,
+      25594,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      7,
+      5,
+      0,
+      18157,
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      1976,
+      0,
+      147
+    ],
+    [
+      4,
+      0,
+      0,
+      0,
+      0,
+      387,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      17,
+      0,
+      116
+    ]
+  ],
+  "labels": [
+    "BENIGN",
+    "DoS",
+    "DDoS",
+    "PortScan",
+    "BruteForce",
+    "Botnet",
+    "WebAttack"
+  ],
+  "extra": {
+    "experiment": "Stage 7 - WebAttack operating point (hgbt)",
+    "probability_source": "hgbt",
+    "threshold": 0.69,
+    "operating_point": "best_f1",
+    "decision_rule": "predict WebAttack iff p >= threshold, else argmax over other classes",
+    "support_test": 135
+  }
+}
