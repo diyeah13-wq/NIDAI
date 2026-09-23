@@ -110,6 +110,25 @@ macro F1 0.891 and natively hits WebAttack recall 0.911.
    fit the WebAttack boundary better than the bagged forest at this training
    budget. Shortlist: HGB (balanced) for detection, RF forest as a fallback.
 
+## Stage 8 - operational pipeline + "alert + reason" dashboard
+
+Detection and explanation are kept as two layers, reused from the earlier
+studies instead of retrained:
+
+- **Detection core** - the balanced HGB from Stage 7 (or, in the sidebar, the
+  Stage 4 Random Forest) predicts on all 69 features. This is what flags a
+  flow, so the wrong-alarm story stays as good as the best single model.
+- **Explanation layer** - the 5 per-group forests from Stage 5. For a flagged
+  flow, each technique reports its own confidence in the alert class and lists
+  the features whose removal from the flow drops that confidence the most
+  (perturbation attribution). The flow's features are z-scored against the
+  scanned batch so the numbers read like "this value is 2.3 SD away from
+  normal".
+
+`src/pipeline.py` exposes `FlowScorer.score/explain`; `dashboard/app.py` is a
+Streamlit view over it: a KPI header, the alert queue with severity, and a
+drill-down that answers "why was flow #n flagged?".
+
 ## Reproduce
 
 ```
@@ -118,6 +137,8 @@ python src/fusion_model.py             # Stage 5 - per-technique + naive voting
 python src/stacked_fusion.py           # Stage 6 - stacked (OOF) meta-fusion
 python src/rare_class_experiments.py   # Stage 7 - rare-class threshold sweep +
                                        #   oversampled RF + balanced HGB
+python src/pipeline.py                 # Stage 8 - CLI smoke of score + explain
+streamlit run dashboard/app.py         # Stage 8 - alert + reason dashboard
 ```
 
 Metrics: `results/metrics/*.json`  |  plots: `results/plots/stage*`  |
