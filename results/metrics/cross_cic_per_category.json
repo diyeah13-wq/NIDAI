@@ -1,0 +1,78 @@
+{
+  "experiment": "cross_cic_per_category",
+  "Analysis": {
+    "n": 2000,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 2000
+  },
+  "Backdoor": {
+    "n": 1746,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 1746
+  },
+  "DoS": {
+    "n": 12264,
+    "predicted_attack": 13,
+    "recall": 0.0011,
+    "true_attack": 12264
+  },
+  "Exploits": {
+    "n": 33393,
+    "predicted_attack": 12,
+    "recall": 0.0004,
+    "true_attack": 33393
+  },
+  "Fuzzers": {
+    "n": 18184,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 18184
+  },
+  "Generic": {
+    "n": 40000,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 40000
+  },
+  "Normal": {
+    "n": 56000,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 0
+  },
+  "Reconnaissance": {
+    "n": 10491,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 10491
+  },
+  "Shellcode": {
+    "n": 1133,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 1133
+  },
+  "Worms": {
+    "n": 130,
+    "predicted_attack": 0,
+    "recall": 0.0,
+    "true_attack": 130
+  },
+  "extra": {
+    "fit_seconds": 19.3,
+    "common_features": [
+      "Flow Duration",
+      "Total Fwd Packets",
+      "Total Backward Packets",
+      "Total Length of Fwd Packets",
+      "Total Length of Bwd Packets",
+      "Flow Bytes/s",
+      "Flow Packets/s",
+      "Fwd Packet Length Mean",
+      "Bwd Packet Length Mean"
+    ],
+    "domain": "cross-domain"
+  }
+}

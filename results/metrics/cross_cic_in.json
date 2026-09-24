@@ -1,0 +1,27 @@
+{
+  "experiment": "cross_cic_in",
+  "accuracy": 0.9897,
+  "attack_recall": 0.9917,
+  "attack_precision": 0.9482,
+  "attack_f1": 0.9695,
+  "false_alarm_rate": 0.0107,
+  "predicted_attack": 89084,
+  "true_attack": 85176,
+  "true_benign": 429677,
+  "auc": 0.9994,
+  "extra": {
+    "fit_seconds": 19.3,
+    "common_features": [
+      "Flow Duration",
+      "Total Fwd Packets",
+      "Total Backward Packets",
+      "Total Length of Fwd Packets",
+      "Total Length of Bwd Packets",
+      "Flow Bytes/s",
+      "Flow Packets/s",
+      "Fwd Packet Length Mean",
+      "Bwd Packet Length Mean"
+    ],
+    "domain": "in-domain"
+  }
+}

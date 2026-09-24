@@ -129,6 +129,88 @@ studies instead of retrained:
 Streamlit view over it: a KPI header, the alert queue with severity, and a
 drill-down that answers "why was flow #n flagged?".
 
+## Stage 9 - cross-dataset generalization (CIC-IDS2017 <-> UNSW-NB15)
+
+Do the detectors generalise to a different benchmark? UNSW-NB15 has a
+different 49-feature schema, so we cut both datasets down to the same 9
+"packet anatomy" features (duration, fwd/bwd packet and byte counts, Flow
+Bytes/s and Packets/s *re-derived with the same formula on both sides*, fwd/bwd
+mean packet size). Classes collapse to the only comparable signal: benign vs
+attack. A balanced HGB (identical hyperparameters to Stage 7) is trained on
+one dataset and tested on the other, in both directions.
+
+| Detector trained on | Evaluated on | domain | AUC | attack recall | false alarm |
+|---|---|---|---|---|---|
+| CIC (300k, rare-aware) | CIC test | in | 0.999 | 0.99 | 0.011 |
+| CIC | UNSW test (175k) | **cross** | 0.548 | ~0.00 | 0.000 |
+| UNSW (82k, rare cats kept) | UNSW test | in | 0.983 | 0.86 | 0.039 |
+| UNSW | CIC test | **cross** | 0.642 | 0.79 | 0.539 |
+
+### Conclusions
+
+1. **Models stay dataset-bound.** Near-perfect in-domain (AUC ~0.98-0.99)
+   collapses to 0.55 (effectively random) in the CIC->UNSW direction. The
+   classifier learned CIC's attack shape - deployed on UNSW flows it raises
+   almost no alerts, and the "safe" story is an artefact (`recall ~0`, `FA 0`).
+
+2. **The reverse direction shows a prior, not discrimination.** UNSW->CIC
+   catches 79% of CIC attacks but at a 54% false-alarm rate: the model's
+   general "attack-ness" transfers, its decision boundary does not.
+
+3. **A shared feature vocabulary does not a shared distribution make.** Even
+   with identical feature definitions the two benchmarks' flow populations
+   barely overlap, so threshold-based tree models cannot port. This is the
+   textbook cross-dataset result in NIDS research, not a fixable bug.
+
+4. **Operational guideline:** the detector must be retrained or
+   domain-adapted per deployment (fine-tuned, or fed distribution statistics
+   of the target network); a model copied across environments is silently
+   blind. The pipeline/dashboard from Stage 8 make that retraining cheap,
+   which is the transferable part of the system.
+
+## Stage 10 - live capture, flow rebuild, and detection (offline + sniff)
+
+Studies 1-9 were all offline tables. Stage 10 closes the loop: take raw packets
+(as a stream), rebuild the SAME 69-feature CIC-IDS2017 representation the
+models were trained on, and run the Stage 7/8 scorer on finished flows. Three
+layers, kept deliberately separate (`src/live/`):
+
+1. **Flow math** (`flow_features.py`) - captures raw 5-tuple PacketEvents into
+   a stateless, scapy-free `Flow`/`FlowTable` and finalizes the 69 features in
+   `config.FEATURE_ORDER` (float32, no scaling). Every feature is declared in
+   one of three tiers (`FEATURE_META`):
+   - `exact` - computable exactly from a bidirectional packet stream
+     (counts, byte/rate stats, IATs, flag counts, port, window);
+   - `approx` - CICFlowMeter-compatible reconstructions over tunable
+     parameters (active/idle burst and subflow timeouts; init-window / act-data
+     heuristics) that may differ from the lab capture at the margins;
+   - `fill0` - structurally absent here (per-direction header sums) -> 0.0,
+     which the training pipeline already sanctioned for missing columns.
+2. **Capture** (`capture.py`) - the only scapy/Npcap-touching module. Turns a
+   raw Ethernet frame into a `PacketEvent`: IP proto, TCP flags, window, and
+   header/payload split via on-wire IP total length. Non-IP frames are skipped.
+3. **Detector** (`detector.py`) - `LiveDetector.ingest(frame)` = capture ->
+   `FlowTable.add` -> `flush_expired_keyed` -> `FlowScorer` on the finished
+   vector. Returns an alert dict per expired flow (source/dest/port, predicted
+   class, severity, probabilities, optional 5-technique explanation).
+
+Two drivers: `--pcap file.pcap` (offline replay; same parse path, no admin) and
+`--live --iface eth0` (scapy sniff, needs Npcap/admin). A demo pcap of three
+synthetic flows replays as `BENIGN` at p≈0.998 through the real HGB detector,
+with or without explanations.
+
+### Honest notes
+
+- **Reconstruction is approximation, not capture replay.** The feature
+  definitions are reproduced to the field, but exact parity with
+  CICFlowMeter's lab capture is not guaranteed (timeout constants, subflow
+  splits, window heuristics). The `exact/approx/fill0` tiers say where to
+  trust the numbers and where to expect drift.
+- **The detector stays dataset-bound** (Stage 9): live flows that differ from
+  CIC's population will be judged by CIC-trained boundaries. The value of this
+  stage is the *pipeline* - train once, score your own capture with the same
+  contract - plus a deterministic test harness (31 unit tests, no Npcap).
+
 ## Reproduce
 
 ```
@@ -139,6 +221,14 @@ python src/rare_class_experiments.py   # Stage 7 - rare-class threshold sweep +
                                        #   oversampled RF + balanced HGB
 python src/pipeline.py                 # Stage 8 - CLI smoke of score + explain
 streamlit run dashboard/app.py         # Stage 8 - alert + reason dashboard
+python src/cross_dataset.py            # Stage 9 - cross-dataset transfer (2 ways)
+
+# Stage 10 - live detection
+python -m unittest tests.test_flow_features   # flow math (16 tests)
+python -m unittest tests.test_capture_layer   # scapy capture (10 tests)
+python -m unittest tests.test_live_detector   # engine + pcap replay (5 tests)
+python src/live/detector.py --pcap demo.pcap --timeout 0.4 --explain
+python src/live/detector.py --live --iface eth0 --count 500 --explain
 ```
 
 Metrics: `results/metrics/*.json`  |  plots: `results/plots/stage*`  |

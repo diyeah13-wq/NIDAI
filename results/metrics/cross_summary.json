@@ -1,0 +1,46 @@
+{
+  "cic_in": {
+    "accuracy": 0.9897,
+    "attack_recall": 0.9917,
+    "attack_precision": 0.9482,
+    "attack_f1": 0.9695,
+    "false_alarm_rate": 0.0107,
+    "predicted_attack": 89084,
+    "true_attack": 85176,
+    "true_benign": 429677,
+    "auc": 0.9994
+  },
+  "cic_to_unsw": {
+    "accuracy": 0.3195,
+    "attack_recall": 0.0002,
+    "attack_precision": 1.0,
+    "attack_f1": 0.0004,
+    "false_alarm_rate": 0.0,
+    "predicted_attack": 25,
+    "true_attack": 119341,
+    "true_benign": 56000,
+    "auc": 0.5478
+  },
+  "unsw_in": {
+    "accuracy": 0.895,
+    "attack_recall": 0.864,
+    "attack_precision": 0.9793,
+    "attack_f1": 0.918,
+    "false_alarm_rate": 0.039,
+    "predicted_attack": 105294,
+    "true_attack": 119341,
+    "true_benign": 56000,
+    "auc": 0.9825
+  },
+  "unsw_to_cic": {
+    "accuracy": 0.5148,
+    "attack_recall": 0.7875,
+    "attack_precision": 0.2245,
+    "attack_f1": 0.3494,
+    "false_alarm_rate": 0.5392,
+    "predicted_attack": 298764,
+    "true_attack": 85176,
+    "true_benign": 429677,
+    "auc": 0.6415
+  }
+}
