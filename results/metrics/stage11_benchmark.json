@@ -1,0 +1,37 @@
+{
+  "generator": {
+    "n_flows": 2000,
+    "fps": 1000.0,
+    "seed": 42
+  },
+  "detectors": [],
+  "throughput": {
+    "timeout_2_s": 28.2,
+    "timeout_15_s": 26.8,
+    "timeout_60_s": 24.9
+  },
+  "latency_by_timeout_s": [
+    {
+      "timeout_s": 2.0,
+      "median_latency_s": 2.098
+    },
+    {
+      "timeout_s": 15.0,
+      "median_latency_s": 15.101
+    },
+    {
+      "timeout_s": 60.0,
+      "median_latency_s": 60.122
+    }
+  ],
+  "explain_cost_ms_per_alert": {
+    "n": 15,
+    "mean": 6117.33,
+    "median": 5700.08,
+    "max": 9413.75
+  },
+  "detector_throughput_flows_per_s": {
+    "HGB": 28.2,
+    "RandomForest": 10.3
+  }
+}

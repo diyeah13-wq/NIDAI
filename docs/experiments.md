@@ -211,6 +211,35 @@ with or without explanations.
   stage is the *pipeline* - train once, score your own capture with the same
   contract - plus a deterministic test harness (31 unit tests, no Npcap).
 
+## Stage 11 - live pipeline performance: throughput, latency, explain cost
+
+A live IDS needs operational numbers, not just accuracy. `src/live/benchmark.py`
+feeds a deterministic synthetic stream (2000 sessions at 1000 offered flows/s,
+scapy-crafted frames, no Npcap) through the real Stage 10 pipeline and measures
+four things. The machine is a busy laptop, so absolute numbers are noisy
+(±2x run-to-run); the ratios and the structural conclusions are the point.
+
+| measurement | result | meaning |
+|---|---|---|
+| throughput (finalize+score) | ~25-80 flows/s | the Python capture+flow-math hot path is a few ms per packet - fine for lab/demo, nowhere near line rate |
+| detection latency | ≈ flow timeout (2s->2.1, 15->15.1, 60->60.1) | timeout sits exactly where it should: a knob that trades feature completeness for alert delay |
+| explanation cost | ~2.4-6.1 s per alert (on-demand) | the 5-group perturbation explain is seconds-scale; it must stay off the hot path |
+| detector score speed | HGB ~28 flows/s vs RandomForest ~10 | the balanced HGB detection core is also the cheaper one to run; RF about 3x slower per flow |
+
+Conclusions:
+
+1. **The bottleneck is capture + flow math, not the model.** Processing a
+   packet costs ~3.5 ms of which the HGB predict is a fraction. A real
+   deployment would batch capture (e.g. libnids / NFQueue) or drop to compiled
+   flow exporters; this pipeline is an honest reference implementation.
+2. **Timeout is a direct latency dial.** Alert delay tracks the configured
+   idle timeout one-to-one - useful, because it lets an operator pick the
+   latency/completeness trade explicitly instead of discovering it.
+3. **Explanation is expensive by design.** At seconds per alert the 5-technique
+   attribution can only run on demand for a flagged flow (which is exactly how
+   Stage 8 built the dashboard). Quantifying the cost made that design choice
+   explicit rather than assumed.
+
 ## Reproduce
 
 ```
@@ -229,6 +258,7 @@ python -m unittest tests.test_capture_layer   # scapy capture (10 tests)
 python -m unittest tests.test_live_detector   # engine + pcap replay (5 tests)
 python src/live/detector.py --pcap demo.pcap --timeout 0.4 --explain
 python src/live/detector.py --live --iface eth0 --count 500 --explain
+python src/live/benchmark.py --flows 2000            # Stage 11 throughput/latency
 ```
 
 Metrics: `results/metrics/*.json`  |  plots: `results/plots/stage*`  |
