@@ -1,0 +1,108 @@
+{
+  "sampled": 130,
+  "rebuilt": 130,
+  "agreement": 0.562,
+  "rebuilt_benign_share": 0.977,
+  "packets_per_flow": {
+    "row_median": 4,
+    "emitted_median": 5,
+    "row_p90": 27,
+    "emitted_p90": 25
+  },
+  "tier_z_error": {
+    "exact": {
+      "median": 0.0,
+      "p90": 0.28
+    },
+    "approx": {
+      "median": 0.0,
+      "p90": 0.24
+    }
+  },
+  "worst_features_p90": [
+    [
+      "ACK Flag Count",
+      51.73
+    ],
+    [
+      "Down/Up Ratio",
+      30.35
+    ],
+    [
+      "FIN Flag Count",
+      5.64
+    ],
+    [
+      "Active Min",
+      3.69
+    ],
+    [
+      "Active Mean",
+      3.53
+    ],
+    [
+      "Active Max",
+      2.68
+    ],
+    [
+      "min_seg_size_forward",
+      2.47
+    ],
+    [
+      "Init_Win_bytes_backward",
+      2.28
+    ],
+    [
+      "Bwd Packet Length Max",
+      2.2
+    ],
+    [
+      "Max Packet Length",
+      2.11
+    ]
+  ],
+  "per_class": {
+    "BENIGN": {
+      "n": 70,
+      "detector_correct_on_row": 70,
+      "verdict_kept": 70,
+      "rebuilt_says_benign": 70
+    },
+    "DoS": {
+      "n": 10,
+      "detector_correct_on_row": 10,
+      "verdict_kept": 0,
+      "rebuilt_says_benign": 10
+    },
+    "DDoS": {
+      "n": 10,
+      "detector_correct_on_row": 10,
+      "verdict_kept": 0,
+      "rebuilt_says_benign": 10
+    },
+    "PortScan": {
+      "n": 10,
+      "detector_correct_on_row": 10,
+      "verdict_kept": 0,
+      "rebuilt_says_benign": 10
+    },
+    "BruteForce": {
+      "n": 10,
+      "detector_correct_on_row": 9,
+      "verdict_kept": 0,
+      "rebuilt_says_benign": 10
+    },
+    "Botnet": {
+      "n": 10,
+      "detector_correct_on_row": 10,
+      "verdict_kept": 2,
+      "rebuilt_says_benign": 8
+    },
+    "WebAttack": {
+      "n": 10,
+      "detector_correct_on_row": 9,
+      "verdict_kept": 1,
+      "rebuilt_says_benign": 9
+    }
+  }
+}

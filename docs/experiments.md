@@ -240,6 +240,74 @@ Conclusions:
    Stage 8 built the dashboard). Quantifying the cost made that design choice
    explicit rather than assumed.
 
+## Stage 12 - a dashboard a normal person can read, and what it cost to find
+
+Stages 10-11 built a detector that runs on packets. Stage 8 built an
+"alert + reason" view, but it showed raw 69-feature numbers and z-scores, which
+answers "what did the model see?" for an ML reviewer and nothing at all for the
+person who has to act on the alert. Stage 12 rebuilds the front end around
+language (`dashboard/live.py`, `src/live/plain.py`): a friendly label and unit
+for all 69 features, a severity colour, and per-technique reasons phrased as
+sentences ("packets sent = 4 pkts - far higher than usual (12x the normal
+spread)"). A test pins the invariant that no feature can fall back to
+"feature value", so the vocabulary cannot silently rot.
+
+The dashboard has three honest sources: **lab replay** (real held-out CIC rows
+scored live by the real detector, paced, true labels shown), **packet replay**
+(the Stage 10 capture path over a generated pcap), and **live sniff**
+(needs Npcap + admin). Because explanation costs seconds per alert (Stage 11),
+the feed computes them in a worker thread with a budget cap, so the UI never
+blocks - which is why an alert's "why" can arrive a few seconds after the alert
+itself.
+
+### The measurement that changed the design
+
+Building the demo traffic as a sanity check produced a bad result: replaying
+the generated pcap through the real detector flagged **nothing**. Rather than
+paper over it, `python -m src.live.demo_traffic --check` measures the round trip
+directly - score each row as-is, rebuild its features from generated packets,
+score again (130 stratified rows, real Stage 7 detector):
+
+| | value |
+|---|---|
+| verdict kept after the round trip | **56.2%** |
+| rebuilt flows the detector calls BENIGN | **97.7%** |
+| detector correct on the ORIGINAL rows | 70/70 benign, 9-10/10 per attack class |
+| verdict kept, per attack class | DoS/DDoS/PortScan/BruteForce **0/10**, Botnet 2/10, WebAttack 1/10 |
+| feature error, median flow | ~0.00 SD (both tiers) |
+| feature error, p90 | 0.28 SD (exact tier), 0.24 SD (approx tier) |
+| worst features at p90 | ACK Flag Count **51.7 SD**, Down/Up Ratio **30.4 SD**, FIN Flag Count 5.6 SD |
+
+### Conclusions
+
+1. **The round trip is exact for a typical flow and wrong for an attack.**
+   The median flow is 4-5 packets, and the packetizer rebuilds it almost
+   perfectly - which is why benign verdicts survive 70/70 and the median
+   feature error is ~0 SD. Attacks live in the tail: their flag and ratio
+   counts are tens of SD off, because a flow can only be as long as the
+   packetizer emits, and CIC attack rows carry far more packets and far more
+   ACKs than a demo can afford. The signal is not lost in the flow math
+   (Stage 10), it is lost in the *synthesis* of the packets.
+
+2. **A quiet packet demo is a property of the demo, not evidence the IDS
+   works.** The same detector reads the original rows at 9-10/10 per attack
+   class. Anyone replaying a coarse pcap and seeing silence should read it as
+   "my synthetic traffic is too small to carry the signature", never as "the
+   model is broken".
+
+3. **Therefore lab replay is the default source and packet replay is a
+   labelled second opinion.** Lab replay shows real, ranked, explainable
+   detections with ground truth attached. Packet replay stays in the UI
+   because it is the honest capture path - and its quietness is now a
+   documented, measured property rather than a surprise.
+
+4. **Two bugs the Stage 12 UI work exposed, both fixed.** The dashboard called
+   its helpers before defining them (`NameError` on every run), and the feed
+   passed 1D rows to `predict_proba`, which sklearn rejects - the unit tests
+   missed it because the fake scorer accepted anything. The fake now asserts
+   sklearn's real 2D contract, and the app is verified with Streamlit's
+   `AppTest` harness rather than by eye.
+
 ## Reproduce
 
 ```
@@ -259,7 +327,15 @@ python -m unittest tests.test_live_detector   # engine + pcap replay (5 tests)
 python src/live/detector.py --pcap demo.pcap --timeout 0.4 --explain
 python src/live/detector.py --live --iface eth0 --count 500 --explain
 python src/live/benchmark.py --flows 2000            # Stage 11 throughput/latency
+
+# Stage 12 - plain-language live dashboard
+streamlit run dashboard/live.py            # lab / packet / live-sniff sources
+python -m unittest tests.test_live_dashboard  # plain language + feed (6 tests)
+python -m src.live.demo_traffic            # build results/demo_live.pcap
+python -m src.live.demo_traffic --check    # round-trip fidelity measurement
 ```
+
+All tests: `python -m unittest discover -s tests` (40 tests, no Npcap needed).
 
 Metrics: `results/metrics/*.json`  |  plots: `results/plots/stage*`  |
 per-class tables are printed at each run.
