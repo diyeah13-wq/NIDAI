@@ -1,0 +1,54 @@
+{
+  "run_id": "benign_web_browse_20261002T194742_s52",
+  "scenario": "benign_web_browse",
+  "label": "BENIGN",
+  "label_source": "executed_scenario",
+  "ground_truth_note": "label comes from the scenario that was executed and its time window; the model was not consulted",
+  "command": "sequential HTTP GETs of 13 paths on http://192.168.56.101/, reading response bodies (1 fetched)",
+  "target": "192.168.56.101",
+  "interface": {
+    "name": "Ethernet 2",
+    "description": "VirtualBox Host-Only Ethernet Adapter",
+    "ip": "192.168.56.1"
+  },
+  "started_at_iso": "2026-10-02T19:47:43.224603+05:30",
+  "ended_at_iso": "2026-10-02T19:47:44.954812+05:30",
+  "t_start_epoch": 1790950663.224603,
+  "t_end_epoch": 1790950664.954812,
+  "window_end_epoch": 1790950665.704812,
+  "grace_s": 0.75,
+  "flow_timeout_s": 2.0,
+  "seed": 42,
+  "params": {
+    "http_timeout": 0.8,
+    "idle_s": 20.0,
+    "scan_delay": 0.01,
+    "scan_delay_slow": 0.08,
+    "scan_ports": 200,
+    "seed": 42,
+    "sock_timeout": 0.05,
+    "target": "192.168.56.101",
+    "web_base": null
+  },
+  "counts": {
+    "packets_captured": 129,
+    "packets_unparsed": 0,
+    "flows_drained": 13,
+    "flows_kept": 13,
+    "flows_discarded": 0,
+    "flows_discarded_by_reason": {},
+    "flows_pre_scenario_discarded": 0,
+    "kept_scoreable": 13,
+    "wire_verdicts": {
+      "handshake": 13
+    }
+  },
+  "raw_file": "data/lab/raw/benign_web_browse/benign_web_browse_20261002T194742_s52.jsonl",
+  "raw_file_sha256": "9d5b6b464dea3585c16cd44c730828a5b3652dbf9b7d59842f6d8443c97fd690",
+  "environment": {
+    "python": "3.10.7",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "hostname": "Diya",
+    "scapy": "2.6.1"
+  }
+}

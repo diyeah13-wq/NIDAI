@@ -194,8 +194,9 @@ class TestFlowTable(unittest.TestCase):
         tbl.add(pkt(0.0, A, B, 1, 2, plen=10, hlen=20))
         tbl.add(pkt(0.5, B, A, 2, 1, plen=40, hlen=20))
         tbl.add(pkt(1.0, "10.0.0.9", "10.0.0.8", 55, 66, plen=5, hlen=20))
+        tbl.add(pkt(1.5, "10.0.0.8", "10.0.0.9", 66, 55, plen=5, hlen=20))
         self.assertEqual(tbl.active_flows(), 2)
-        expired = tbl.flush_expired(now=16.0)
+        expired = tbl.flush_expired(now=17.0)  # >15s idle for the 1.5s flow
         self.assertEqual(len(expired), 2)
         self.assertEqual(tbl.active_flows(), 0)
         feats = [f for f in expired if f["Destination Port"] == 2][0]
@@ -203,6 +204,46 @@ class TestFlowTable(unittest.TestCase):
         self.assertEqual(feats["Total Backward Packets"], 1)
         self.assertAlmostEqual(feats["Total Length of Fwd Packets"], 30.0)
         self.assertAlmostEqual(feats["Total Length of Bwd Packets"], 60.0)
+
+
+class TestScoreableGate(unittest.TestCase):
+    """The direction gate: only bidirectional flows reach the model.
+
+    Justified by the class-conditional measurement in docs/experiments.md -
+    one-way flows are 12% of BENIGN but only 0.04% of PortScan, so gating on
+    direction discards multicast noise and keeps real attacks.
+    """
+
+    def test_one_way_flow_is_evicted_but_not_returned(self):
+        tbl = FlowTable(flow_timeout_s=1.0)
+        tbl.add(pkt(0.0, A, B, 1, 2, plen=10, hlen=20))
+        self.assertEqual(tbl.flush_expired(now=5.0), [])
+        self.assertEqual(tbl.active_flows(), 0)      # evicted, not leaked
+        self.assertEqual(tbl.dropped_unscoreable, 1)  # and counted, not silent
+
+    def test_bidirectional_flow_passes_the_gate(self):
+        tbl = FlowTable(flow_timeout_s=1.0)
+        tbl.add(pkt(0.0, A, B, 1, 2, plen=10, hlen=20))
+        tbl.add(pkt(0.1, B, A, 2, 1, plen=40, hlen=20))
+        self.assertEqual(len(tbl.flush_expired(now=5.0)), 1)
+        self.assertEqual(tbl.dropped_unscoreable, 0)
+
+    def test_gate_can_be_relaxed_for_inspection(self):
+        tbl = FlowTable(flow_timeout_s=1.0, min_bwd_packets=0)
+        tbl.add(pkt(0.0, A, B, 1, 2, plen=10, hlen=20))
+        self.assertEqual(len(tbl.flush_expired(now=5.0)), 1)
+        self.assertEqual(tbl.dropped_unscoreable, 0)
+
+    def test_two_packet_portscan_shape_survives(self):
+        # The real reason this is a direction gate and not a volume gate:
+        # 98.5% of CIC PortScan rows are exactly 1 fwd + 1 bwd packet.
+        tbl = FlowTable(flow_timeout_s=1.0)
+        tbl.add(pkt(0.0, A, B, 40000, 22, plen=0, hlen=40, flags=PSH))
+        tbl.add(pkt(0.00005, B, A, 22, 40000, plen=0, hlen=20, flags=ACK))
+        got = tbl.flush_expired(now=5.0)
+        self.assertEqual(len(got), 1)
+        self.assertEqual(got[0]["Total Fwd Packets"], 1)
+        self.assertEqual(got[0]["Total Backward Packets"], 1)
 
 
 if __name__ == "__main__":

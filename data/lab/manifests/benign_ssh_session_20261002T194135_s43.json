@@ -1,0 +1,54 @@
+{
+  "run_id": "benign_ssh_session_20261002T194135_s43",
+  "scenario": "benign_ssh_session",
+  "label": "BENIGN",
+  "label_source": "executed_scenario",
+  "ground_truth_note": "label comes from the scenario that was executed and its time window; the model was not consulted",
+  "command": "SSH banner exchange with 192.168.56.101:22 (33 bytes out, 38 bytes in)",
+  "target": "192.168.56.101",
+  "interface": {
+    "name": "Ethernet 2",
+    "description": "VirtualBox Host-Only Ethernet Adapter",
+    "ip": "192.168.56.1"
+  },
+  "started_at_iso": "2026-10-02T19:41:36.242983+05:30",
+  "ended_at_iso": "2026-10-02T19:41:36.261840+05:30",
+  "t_start_epoch": 1790950296.242983,
+  "t_end_epoch": 1790950296.26184,
+  "window_end_epoch": 1790950297.01184,
+  "grace_s": 0.75,
+  "flow_timeout_s": 2.0,
+  "seed": 42,
+  "params": {
+    "http_timeout": 0.8,
+    "idle_s": 30.0,
+    "scan_delay": 0.01,
+    "scan_delay_slow": 0.08,
+    "scan_ports": 200,
+    "seed": 42,
+    "sock_timeout": 0.05,
+    "target": "192.168.56.101",
+    "web_base": null
+  },
+  "counts": {
+    "packets_captured": 9,
+    "packets_unparsed": 0,
+    "flows_drained": 1,
+    "flows_kept": 1,
+    "flows_discarded": 0,
+    "flows_discarded_by_reason": {},
+    "flows_pre_scenario_discarded": 0,
+    "kept_scoreable": 1,
+    "wire_verdicts": {
+      "handshake": 1
+    }
+  },
+  "raw_file": "data/lab/raw/benign_ssh_session/benign_ssh_session_20261002T194135_s43.jsonl",
+  "raw_file_sha256": "d7325ea994224813186d677bae7d0e5b3cc51ba0114d45826208c8ed6f709b83",
+  "environment": {
+    "python": "3.10.7",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "hostname": "Diya",
+    "scapy": "2.6.1"
+  }
+}

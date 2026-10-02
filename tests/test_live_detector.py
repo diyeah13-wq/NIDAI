@@ -78,6 +78,7 @@ class TestBidirectionalMerging(unittest.TestCase):
     def test_explain_attached(self):
         det = LiveDetector(FakeScorer(), flow_timeout_s=1.0)
         det.ingest(frame(0.0, A, B, 1, 80), ts=0.0)
+        det.ingest(frame(0.1, B, A, 80, 1), ts=0.1)  # bidirectional
         alerts = det.ingest(frame(5.0, C_S, D_S, 7, 9), ts=5.0, explain=True)
         a = alerts[0]
         self.assertEqual(a["predicted_class"], "BENIGN")
@@ -97,6 +98,16 @@ class TestSkippedAndCounters(unittest.TestCase):
         det.ingest(frame(0.1, A, B, 2, 90), ts=0.1)
         self.assertEqual(det.n_packets, 2)
         self.assertEqual(det.n_flushed, 0)  # nothing idle yet
+
+    def test_one_way_traffic_is_counted_not_scored(self):
+        # Regression guard: mDNS/SSDP multicast used to reach the model and
+        # come back as BruteForce. It must be dropped and reported instead.
+        det = LiveDetector(FakeScorer(), flow_timeout_s=1.0)
+        det.ingest(frame(0.0, A, B, 5353, 5353), ts=0.0)
+        alerts = det.ingest(frame(5.0, C_S, D_S, 7, 9), ts=5.0)
+        self.assertEqual(alerts, [])
+        self.assertEqual(det.n_dropped_unscoreable, 1)
+        self.assertEqual(det.n_flushed, 0)
 
 
 class TestPcapReplay(unittest.TestCase):

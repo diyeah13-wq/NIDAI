@@ -1,6 +1,7 @@
 # Large data - never commit
 data/raw/
 data/processed/
+data/lab/raw/
 CIC-IDS2017*/
 UNSW-NB15*/
 
@@ -32,3 +33,6 @@ Thumbs.db
 .DS_Store
 .vscode/
 .idea/
+
+# Scratch output from ad-hoc terminal sessions
+tmp_*.txt

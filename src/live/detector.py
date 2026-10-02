@@ -59,12 +59,17 @@ class LiveDetector:
     """Capture -> FlowTable -> scorer. Feed frames, get alerts."""
 
     def __init__(self, scorer, flow_timeout_s=FLOW_TIMEOUT_S,
-                 capture=packet_to_event):
+                 capture=packet_to_event, min_bwd_packets=1):
         self.scorer = scorer
-        self.table = FlowTable(flow_timeout_s)
+        self.table = FlowTable(flow_timeout_s, min_bwd_packets=min_bwd_packets)
         self.capture = capture
         self.n_flushed = 0
         self.n_packets = 0
+
+    @property
+    def n_dropped_unscoreable(self):
+        """Flows evicted but not scored (one-way / insufficient bidirectional)."""
+        return self.table.dropped_unscoreable
 
     def score_vector(self, vec):
         """Predict one feature vector -> (class name, severity, conf, proba)."""
@@ -74,6 +79,39 @@ class LiveDetector:
         return cls, SEVERITY.get(cls, "UNKNOWN"), float(proba.max()), \
             {CLASS_ORDER[c]: float(v) for c, v in enumerate(proba)}
 
+    def _create_alert(self, key, feats, explain=False):
+        self.n_flushed += 1
+        vec = _vector(feats)
+        cls, severity, conf, proba = self.score_vector(vec)
+        alert = {
+            "num": self.n_flushed,
+            "key": key,
+            "src": key[0], "dst": key[1], "dport": key[3], "proto": key[4],
+            "features": {n: float(v) for n, v in feats.items()},
+            "predicted_class": cls,
+            "severity": severity,
+            "confidence": conf,
+            "probabilities": proba,
+        }
+        if explain and getattr(self.scorer, "techniques", None):
+            alert["explanation"] = self.scorer.explain(vec)
+        else:
+            alert["explanation"] = None
+        return alert
+
+    def flush_expired(self, now=None, explain=False):
+        """Flush and score flows that have timed out up to `now` (default: time.time())."""
+        if now is None:
+            import time
+            now = time.time()
+        return [self._create_alert(key, feats, explain=explain)
+                for key, feats in self.table.flush_expired_keyed(now)]
+
+    def flush_all(self, explain=False):
+        """Force flush all remaining flows (e.g. on shutdown/stop)."""
+        return [self._create_alert(key, feats, explain=explain)
+                for key, feats in self.table.flush_all_keyed()]
+
     def ingest(self, raw, ts=None, explain=False):
         """Feed one raw frame; return alerts for flows that just expired."""
         ev = self.capture(raw, ts)
@@ -81,26 +119,7 @@ class LiveDetector:
             return []
         self.n_packets += 1
         self.table.add(ev)
-        alerts = []
-        for key, feats in self.table.flush_expired_keyed(ev.ts):
-            self.n_flushed += 1
-            vec = _vector(feats)
-            cls, severity, conf, proba = self.score_vector(vec)
-            alert = {
-                "key": key,
-                "src": key[0], "dst": key[1], "dport": key[3], "proto": key[4],
-                "features": {n: float(v) for n, v in feats.items()},
-                "predicted_class": cls,
-                "severity": severity,
-                "confidence": conf,
-                "probabilities": proba,
-            }
-            if explain and getattr(self.scorer, "techniques", None):
-                alert["explanation"] = self.scorer.explain(vec)
-            else:
-                alert["explanation"] = None
-            alerts.append(alert)
-        return alerts
+        return self.flush_expired(now=ev.ts, explain=explain)
 
     def replay(self, pcap_path, explain=False, emit=None):
         """Stream a pcap offline (same parse path as live sniffing)."""
@@ -112,18 +131,81 @@ class LiveDetector:
                     if emit is not None:
                         emit(a)
 
-    def live_sniff(self, iface, count, explain=False, emit=None):
+    def live_sniff(self, iface=None, count=None, explain=False, emit=None, timeout=None):
         """scapy sniff on an interface; requires Npcap + admin on Windows."""
+        import threading
+        import time
         from scapy.sendrecv import sniff
 
+        resolved_iface = resolve_interface(iface)
+        stop_event = threading.Event()
+
+        def _heartbeat():
+            while not stop_event.is_set():
+                time.sleep(0.5)
+                alerts = self.flush_expired(time.time(), explain=explain)
+                for a in alerts:
+                    if emit is not None:
+                        emit(a)
+
+        hb = threading.Thread(target=_heartbeat, daemon=True)
+        hb.start()
+
         def _cb(pkt):
-            alerts = self.ingest(bytes(pkt), ts=getattr(pkt, "time", None),
-                                 explain=explain)
+            pkt_time = getattr(pkt, "time", None)
+            if pkt_time is None:
+                pkt_time = time.time()
+            alerts = self.ingest(bytes(pkt), ts=float(pkt_time), explain=explain)
             for a in alerts:
                 if emit is not None:
                     emit(a)
 
-        sniff(iface=iface, store=0, count=count, prn=_cb)
+        try:
+            kwargs = {"store": 0, "prn": _cb}
+            if resolved_iface is not None:
+                kwargs["iface"] = resolved_iface
+            if count is not None and count > 0:
+                kwargs["count"] = count
+            if timeout is not None and timeout > 0:
+                kwargs["timeout"] = timeout
+            sniff(**kwargs)
+        finally:
+            stop_event.set()
+            for a in self.flush_all(explain=explain):
+                if emit is not None:
+                    emit(a)
+
+
+def resolve_interface(iface=None):
+    """Resolve user-supplied interface name, IP, or return Scapy's default."""
+    from scapy.config import conf
+    if iface is None or str(iface).strip() == "":
+        return conf.iface
+    query = str(iface).strip()
+    try:
+        for k, v in conf.ifaces.items():
+            if (query.lower() == getattr(v, "name", "").lower() or
+                query.lower() in getattr(v, "description", "").lower() or
+                query == getattr(v, "ip", "") or
+                query.lower() in getattr(v, "guid", "").lower() or
+                query.lower() in str(k).lower()):
+                return v
+    except Exception:
+        pass
+    return iface
+
+
+def list_interfaces():
+    """Return a formatted string of available network interfaces."""
+    from scapy.config import conf
+    lines = ["Available Network Interfaces:"]
+    for k, v in conf.ifaces.items():
+        name = getattr(v, "name", "Unknown")
+        desc = getattr(v, "description", "")
+        ip = getattr(v, "ip", "")
+        is_default = " (DEFAULT)" if v == conf.iface or str(k) == str(conf.iface) else ""
+        lines.append(f"  - [{name}] {desc} | IP: {ip or 'N/A'}{is_default}")
+    return "\n".join(lines)
 
 
 def _vector(feats):
@@ -146,9 +228,12 @@ def main(argv=None):
     src.add_argument("--pcap", help="offline replay of a pcap file")
     src.add_argument("--live", action="store_true",
                      help="sniff a live interface (Npcap/admin required)")
-    ap.add_argument("--iface", default=None, help="interface for --live")
+    src.add_argument("--list-ifaces", action="store_true",
+                     help="list all available network interfaces and exit")
+    ap.add_argument("--iface", default=None,
+                    help="interface for --live (name, IP, or GUID; defaults to active)")
     ap.add_argument("--count", type=int, default=500,
-                    help="max packets for --live")
+                    help="max packets for --live (0 for continuous)")
     ap.add_argument("--timeout", type=float, default=FLOW_TIMEOUT_S,
                     help="idle seconds before a flow is finalized")
     ap.add_argument("--detector", default=DETECTOR_KEY,
@@ -159,6 +244,10 @@ def main(argv=None):
                     help="also print BENIGN flows")
     opts = ap.parse_args(argv)
 
+    if opts.list_ifaces:
+        print(list_interfaces())
+        return
+
     scorer = _load_scorer(opts.detector, with_explain=opts.explain)
     det = LiveDetector(scorer, flow_timeout_s=opts.timeout)
 
@@ -168,11 +257,12 @@ def main(argv=None):
         print(_fmt(a), flush=True)
 
     if opts.live:
-        if opts.iface is None:
-            ap.error("--live requires --iface")
-        print("Sniffing on %s (max %d packets)... Ctrl-C to stop"
-              % (opts.iface, opts.count), flush=True)
-        det.live_sniff(opts.iface, opts.count, explain=opts.explain, emit=emit)
+        chosen_iface = resolve_interface(opts.iface)
+        print("Sniffing on %s (max %s packets)... Ctrl-C to stop"
+              % (getattr(chosen_iface, "name", str(chosen_iface)),
+                 opts.count if opts.count > 0 else "unlimited"), flush=True)
+        det.live_sniff(chosen_iface, count=opts.count if opts.count > 0 else None,
+                       explain=opts.explain, emit=emit)
     else:
         print("Replaying %s..." % opts.pcap, flush=True)
         det.replay(opts.pcap, explain=opts.explain, emit=emit)

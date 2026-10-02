@@ -48,6 +48,20 @@ ACTIVE_TIMEOUT_S = 2.0
 IDLE_TIMEOUT_S = 2.0
 SUBFLOW_GAP_S = 2.0
 
+# Scoreable-flow gate. The CIC models were trained on *bidirectional* flow
+# records, and a live capture produces a large volume of one-way flows that the
+# CIC dataset barely contains (mDNS/SSDP/NetBIOS multicast chatter, orphaned
+# requests, capture started mid-connection). Measured on data/processed/test:
+#   Total Backward Packets == 0 share -> BENIGN 12.1%, DDoS 36.6%, DoS 8.6%,
+#                                      PortScan 0.04%, BruteForce 0.8%
+# so requiring >=1 packet each way discards mostly-noise traffic while keeping
+# 99%+ of every attack class (PortScan 99.96%, Botnet 100%, WebAttack 99.26%).
+# NOTE this is a *direction* gate, not a volume gate: 98.5% of PortScan rows are
+# only 2 packets total, so a min-volume gate would delete the attack we care
+# most about. See docs/experiments.md for the measurement.
+DEFAULT_MIN_FWD_PKTS = 1
+DEFAULT_MIN_BWD_PKTS = 1
+
 GROUP_OF = {
     "A_Flow_Volume": [
         "Flow Duration", "Total Fwd Packets", "Total Backward Packets",
@@ -216,8 +230,29 @@ class Flow:
         else:
             self._bwd.append(pkt)
 
-    def is_expired(self, now, timeout_s):
+    def is_terminated(self):
+        """True if the flow saw TCP termination flags (RST or FIN)."""
+        if self.proto != 6:
+            return False
+        return any(bool(p.flags & (RST | FIN)) for p in self._fwd + self._bwd)
+
+    def is_expired(self, now, timeout_s, teardown_timeout_s=1.0):
+        if self.is_terminated():
+            return now - self.last_ts >= teardown_timeout_s
         return now - self.last_ts >= timeout_s
+
+    def is_scoreable(self, min_fwd=DEFAULT_MIN_FWD_PKTS,
+                     min_bwd=DEFAULT_MIN_BWD_PKTS):
+        """True if this flow carries enough bidirectional signal to classify.
+
+        The CIC models expect a two-way conversation. A one-way flow has no
+        Down/Up ratio, no reverse IATs, and no response to compare against, so
+        its 69-feature vector is structurally unlike anything in training and
+        the model falls back on a handful of near-degenerate values - which is
+        how mDNS/SSDP noise was reaching BruteForce. Gate on direction, not
+        volume (see DEFAULT_MIN_BWD_PKTS).
+        """
+        return len(self._fwd) >= min_fwd and len(self._bwd) >= min_bwd
 
     # ------------------------------------------------------------------ #
     def _flag_counts(self):
@@ -411,10 +446,22 @@ def _idle_gaps(ts_list):
 
 
 class FlowTable:
-    """Keyed collection of live flows with timeout expiry (capture-agnostic)."""
+    """Keyed collection of live flows with timeout expiry (capture-agnostic).
 
-    def __init__(self, flow_timeout_s=15.0):
+    ``min_bwd_packets`` gates which finalized flows are *returned*. Non-gated
+    flows are still evicted (so the table does not leak) and counted in
+    ``dropped_unscoreable``; that counter is what the CLI reports so a silent
+    drop can never be mistaken for a quiet network.
+    """
+
+    def __init__(self, flow_timeout_s=15.0, teardown_timeout_s=1.0,
+                 min_fwd_packets=DEFAULT_MIN_FWD_PKTS,
+                 min_bwd_packets=DEFAULT_MIN_BWD_PKTS):
         self.flow_timeout_s = flow_timeout_s
+        self.teardown_timeout_s = teardown_timeout_s
+        self.min_fwd_packets = min_fwd_packets
+        self.min_bwd_packets = min_bwd_packets
+        self.dropped_unscoreable = 0
         self._flows = {}
 
     @staticmethod
@@ -438,11 +485,26 @@ class FlowTable:
         """Return finalized FeatureDicts for flows idle past the timeout."""
         return [feats for _, feats in self.flush_expired_keyed(now)]
 
+    def _finalize(self, key):
+        """Evict one flow, returning (key, features) or None if gated out."""
+        flow = self._flows.pop(key)
+        if not flow.is_scoreable(self.min_fwd_packets, self.min_bwd_packets):
+            self.dropped_unscoreable += 1
+            return None
+        return (key, flow.to_features())
+
     def flush_expired_keyed(self, now):
         """Like flush_expired but keeps the flow key alongside its features."""
         expired = [k for k in self._flows
-                   if self._flows[k].is_expired(now, self.flow_timeout_s)]
-        return [(k, self._flows.pop(k).to_features()) for k in expired]
+                   if self._flows[k].is_expired(now, self.flow_timeout_s,
+                                                self.teardown_timeout_s)]
+        out = [self._finalize(k) for k in expired]
+        return [r for r in out if r is not None]
+
+    def flush_all_keyed(self):
+        """Force-flush all remaining active flows (e.g. on shutdown/stop)."""
+        out = [self._finalize(k) for k in list(self._flows.keys())]
+        return [r for r in out if r is not None]
 
     def active_flows(self):
         return len(self._flows)

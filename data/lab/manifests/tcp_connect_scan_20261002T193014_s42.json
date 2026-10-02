@@ -1,0 +1,58 @@
+{
+  "run_id": "tcp_connect_scan_20261002T193014_s42",
+  "scenario": "tcp_connect_scan",
+  "label": "PortScan",
+  "label_source": "executed_scenario",
+  "ground_truth_note": "label comes from the scenario that was executed and its time window; the model was not consulted",
+  "command": "TCP connect scan of 200 ports on 192.168.56.101 (socket probe tally: {'answered': 21, 'no_answer': 179, 'refused': 0, 'error': 0}; authoritative open/closed split is in wire_verdicts)",
+  "target": "192.168.56.101",
+  "interface": {
+    "name": "Ethernet 2",
+    "description": "VirtualBox Host-Only Ethernet Adapter",
+    "ip": "192.168.56.1"
+  },
+  "started_at_iso": "2026-10-02T19:30:15.357989+05:30",
+  "ended_at_iso": "2026-10-02T19:30:26.599262+05:30",
+  "t_start_epoch": 1790949615.357989,
+  "t_end_epoch": 1790949626.599262,
+  "window_end_epoch": 1790949627.349262,
+  "grace_s": 0.75,
+  "flow_timeout_s": 2.0,
+  "seed": 42,
+  "params": {
+    "http_timeout": 0.25,
+    "idle_s": 20.0,
+    "scan_delay": 0.01,
+    "scan_delay_slow": 0.08,
+    "scan_ports": 200,
+    "seed": 42,
+    "sock_timeout": 0.05,
+    "target": "192.168.56.101",
+    "web_base": null
+  },
+  "counts": {
+    "packets_captured": 503,
+    "packets_unparsed": 0,
+    "flows_drained": 203,
+    "flows_kept": 202,
+    "flows_discarded": 1,
+    "flows_discarded_by_reason": {
+      "ended_after_window": 1
+    },
+    "flows_pre_scenario_discarded": 1,
+    "kept_scoreable": 199,
+    "wire_verdicts": {
+      "reset": 179,
+      "handshake": 20,
+      "one_way": 3
+    }
+  },
+  "raw_file": "data/lab/raw/tcp_connect_scan/tcp_connect_scan_20261002T193014_s42.jsonl",
+  "raw_file_sha256": "4a1aca2a0f77ec275d007f354dcd77db9f012f75ace8172fb18df0597e4942be",
+  "environment": {
+    "python": "3.10.7",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "hostname": "Diya",
+    "scapy": "2.6.1"
+  }
+}
