@@ -1,0 +1,54 @@
+{
+  "run_id": "benign_ftp_control_20261002T225622_s44",
+  "scenario": "benign_ftp_control",
+  "label": "BENIGN",
+  "label_source": "executed_scenario",
+  "ground_truth_note": "label comes from the scenario that was executed and its time window; the model was not consulted",
+  "command": "FTP control login (USER/PASS/QUIT) to 192.168.56.101:21 (48 bytes out, 91 bytes in)",
+  "target": "192.168.56.101",
+  "interface": {
+    "name": "Ethernet 2",
+    "description": "VirtualBox Host-Only Ethernet Adapter",
+    "ip": "192.168.56.1"
+  },
+  "started_at_iso": "2026-10-02T22:56:23.061597+05:30",
+  "ended_at_iso": "2026-10-02T22:56:23.115067+05:30",
+  "t_start_epoch": 1790961983.061597,
+  "t_end_epoch": 1790961983.115067,
+  "window_end_epoch": 1790961983.865067,
+  "grace_s": 0.75,
+  "flow_timeout_s": 2.0,
+  "seed": 42,
+  "params": {
+    "http_timeout": 0.8,
+    "idle_s": 20.0,
+    "scan_delay": 0.01,
+    "scan_delay_slow": 0.08,
+    "scan_ports": 200,
+    "seed": 42,
+    "sock_timeout": 0.05,
+    "target": "192.168.56.101",
+    "web_base": null
+  },
+  "counts": {
+    "packets_captured": 14,
+    "packets_unparsed": 0,
+    "flows_drained": 1,
+    "flows_kept": 1,
+    "flows_discarded": 0,
+    "flows_discarded_by_reason": {},
+    "flows_pre_scenario_discarded": 0,
+    "kept_scoreable": 1,
+    "wire_verdicts": {
+      "handshake": 1
+    }
+  },
+  "raw_file": "data/lab_v2/raw/benign_ftp_control/benign_ftp_control_20261002T225622_s44.jsonl",
+  "raw_file_sha256": "f7c78c5530277bec2aced690d8f9e89df778bce09dcb74cfd70b492aaede244f",
+  "environment": {
+    "python": "3.10.7",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "hostname": "Diya",
+    "scapy": "2.6.1"
+  }
+}

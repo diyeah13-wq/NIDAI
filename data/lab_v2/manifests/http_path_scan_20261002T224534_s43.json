@@ -1,0 +1,56 @@
+{
+  "run_id": "http_path_scan_20261002T224534_s43",
+  "scenario": "http_path_scan",
+  "label": "PortScan",
+  "label_source": "executed_scenario",
+  "ground_truth_note": "label comes from the scenario that was executed and its time window; the model was not consulted",
+  "command": "single HTTP GET per port across 200 ports on 192.168.56.101 (12 responded)",
+  "target": "192.168.56.101",
+  "interface": {
+    "name": "Ethernet 2",
+    "description": "VirtualBox Host-Only Ethernet Adapter",
+    "ip": "192.168.56.1"
+  },
+  "started_at_iso": "2026-10-02T22:45:35.068927+05:30",
+  "ended_at_iso": "2026-10-02T22:48:03.876885+05:30",
+  "t_start_epoch": 1790961335.068927,
+  "t_end_epoch": 1790961483.876885,
+  "window_end_epoch": 1790961484.626885,
+  "grace_s": 0.75,
+  "flow_timeout_s": 2.0,
+  "seed": 42,
+  "params": {
+    "http_timeout": 0.8,
+    "idle_s": 20.0,
+    "scan_delay": 0.01,
+    "scan_delay_slow": 0.08,
+    "scan_ports": 200,
+    "seed": 42,
+    "sock_timeout": 0.05,
+    "target": "192.168.56.101",
+    "web_base": null
+  },
+  "counts": {
+    "packets_captured": 899,
+    "packets_unparsed": 46,
+    "flows_drained": 201,
+    "flows_kept": 201,
+    "flows_discarded": 0,
+    "flows_discarded_by_reason": {},
+    "flows_pre_scenario_discarded": 0,
+    "kept_scoreable": 200,
+    "wire_verdicts": {
+      "reset": 187,
+      "handshake": 13,
+      "one_way": 1
+    }
+  },
+  "raw_file": "data/lab_v2/raw/http_path_scan/http_path_scan_20261002T224534_s43.jsonl",
+  "raw_file_sha256": "4f5f0e34e2de4a72758e4aa737a7be57fee4a2fafb6a8fedd1165629b1100e68",
+  "environment": {
+    "python": "3.10.7",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "hostname": "Diya",
+    "scapy": "2.6.1"
+  }
+}

@@ -1,0 +1,1604 @@
+{
+  "generated_at": "2026-10-02T23:01:07.224833+05:30",
+  "cap": 200,
+  "cic_reference": "test",
+  "lab_dir": "data/lab_v2",
+  "gate": {
+    "min_fwd": 1,
+    "min_bwd": 1
+  },
+  "structure": {
+    "raw_files": 50,
+    "raw_rows": 2298,
+    "features": 69,
+    "labels": [
+      "BENIGN",
+      "PortScan"
+    ]
+  },
+  "provenance": {
+    "manifests": 50,
+    "runs_with_rows": 41,
+    "rows_without_manifest": 0,
+    "sha256_failures": 0,
+    "rows_outside_window": 0
+  },
+  "sampling": {
+    "raw_rows": 2298,
+    "scoreable_rows": 2271,
+    "exact_duplicates_removed": 0,
+    "unique_after_dedup": 2271,
+    "removed_by_signature_cap": 1184,
+    "effective_sample_count": 1087,
+    "label_conflicts": 0,
+    "counts": {
+      "raw": {
+        "PortScan": 2013,
+        "BENIGN": 285
+      },
+      "scoreable": {
+        "PortScan": 1995,
+        "BENIGN": 276
+      },
+      "dedup": {
+        "PortScan": 1995,
+        "BENIGN": 276
+      },
+      "final": {
+        "PortScan": 811,
+        "BENIGN": 276
+      }
+    },
+    "signatures_before_cap": 68,
+    "signatures_after_cap": 68,
+    "top_signatures_removed": [
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=1|bwd=1|dur=2|fb=1|bb=1",
+        "removed": 847
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=2|bwd=2|dur=4|fb=1|bb=1",
+        "removed": 337
+      }
+    ]
+  },
+  "collapse_check": {
+    "types_before": 46,
+    "types_after": 46,
+    "types_lost": [],
+    "signatures": 68,
+    "max_types_per_signature": 2,
+    "mean_types_per_signature": 1.0147058823529411,
+    "signatures_with_multiple_types": 1,
+    "worst_mixed_signatures": [
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P1U0|fwd=6|bwd=7|dur=3|fb=2|bb=3",
+        "n_types": 2,
+        "types": [
+          "L=PortScan|v=handshake|S1R1P1F0|f=4|b=4|dur=3",
+          "L=PortScan|v=reset|S1R1P1F0|f=4|b=4|dur=3"
+        ]
+      }
+    ],
+    "portscan_verdicts_before": {
+      "reset": 1812,
+      "handshake": 183
+    },
+    "portscan_verdicts_after": {
+      "reset": 628,
+      "handshake": 183
+    },
+    "signature_composition": [
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=1|bwd=1|dur=2|fb=1|bb=1",
+        "rows": 1047
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=2|bwd=2|dur=4|fb=1|bb=1",
+        "rows": 537
+      },
+      {
+        "signature": "L=BENIGN|p=6|flags=S1A1R0F1P1U0|fwd=5|bwd=5|dur=3|fb=3|bb=3",
+        "rows": 186
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=1|bwd=1|dur=1|fb=1|bb=1",
+        "rows": 132
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F0P0U0|fwd=1|bwd=1|dur=3|fb=1|bb=1",
+        "rows": 73
+      },
+      {
+        "signature": "L=BENIGN|p=6|flags=S1A1R0F1P1U0|fwd=5|bwd=4|dur=3|fb=3|bb=3",
+        "rows": 41
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R0F1P0U0|fwd=4|bwd=2|dur=2|fb=2|bb=1",
+        "rows": 38
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F1P1U0|fwd=4|bwd=3|dur=3|fb=2|bb=2",
+        "rows": 23
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R0F1P0U0|fwd=4|bwd=3|dur=3|fb=2|bb=2",
+        "rows": 18
+      },
+      {
+        "signature": "L=PortScan|p=6|flags=S1A1R1F1P1U0|fwd=4|bwd=2|dur=2|fb=2|bb=2",
+        "rows": 14
+      }
+    ]
+  },
+  "leakage": {
+    "runs": 41,
+    "train_runs": 33,
+    "holdout_runs": [
+      "benign_web_browse_20261002T225323_s57",
+      "benign_web_browse_20261002T225334_s58",
+      "benign_web_browse_20261002T225344_s59",
+      "benign_web_browse_20261002T225503_s60",
+      "benign_web_browse_20261002T225513_s61",
+      "benign_web_browse_20261002T225523_s62",
+      "tcp_connect_scan_slow_20261002T224149_s43",
+      "tcp_connect_scan_slow_20261002T224223_s44"
+    ],
+    "vectors_shared_across_runs": 0,
+    "train_rows": 830,
+    "holdout_rows": 257,
+    "train_label_counts": {
+      "PortScan": 625,
+      "BENIGN": 205
+    },
+    "holdout_label_counts": {
+      "PortScan": 186,
+      "BENIGN": 71
+    }
+  },
+  "cap_sensitivity": [
+    {
+      "cap": 50,
+      "effective": 546,
+      "PortScan": 406,
+      "BENIGN": 140,
+      "types_kept": 46,
+      "types_lost": 0
+    },
+    {
+      "cap": 100,
+      "effective": 769,
+      "PortScan": 579,
+      "BENIGN": 190,
+      "types_kept": 46,
+      "types_lost": 0
+    },
+    {
+      "cap": 200,
+      "effective": 1087,
+      "PortScan": 811,
+      "BENIGN": 276,
+      "types_kept": 46,
+      "types_lost": 0
+    },
+    {
+      "cap": 400,
+      "effective": 1487,
+      "PortScan": 1211,
+      "BENIGN": 276,
+      "types_kept": 46,
+      "types_lost": 0
+    },
+    {
+      "cap": null,
+      "effective": 2271,
+      "PortScan": 1995,
+      "BENIGN": 276,
+      "types_kept": 46,
+      "types_lost": 0
+    }
+  ],
+  "drift": {
+    "cic_reference": "test",
+    "cic_rows": 514853,
+    "cic_counts": {
+      "BENIGN": 429677,
+      "DoS": 38752,
+      "DDoS": 25603,
+      "PortScan": 18171,
+      "BruteForce": 2124,
+      "Botnet": 391,
+      "WebAttack": 135
+    },
+    "top_features_by_abs_d": [
+      {
+        "label": "BENIGN",
+        "feature": "FIN Flag Count",
+        "abs_cohens_d": 19.3766,
+        "cohens_d": 19.3766,
+        "ks": 0.9894,
+        "cic_median": 0.0,
+        "lab_median": 2.0,
+        "lab_outside_cic_range_pct": 98.55
+      },
+      {
+        "label": "BENIGN",
+        "feature": "ACK Flag Count",
+        "abs_cohens_d": 18.7929,
+        "cohens_d": 18.7929,
+        "ks": 1.0,
+        "cic_median": 0.0,
+        "lab_median": 9.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "SYN Flag Count",
+        "abs_cohens_d": 8.4672,
+        "cohens_d": 8.4672,
+        "ks": 1.0,
+        "cic_median": 0.0,
+        "lab_median": 2.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd PSH Flags",
+        "abs_cohens_d": 4.1736,
+        "cohens_d": 4.1736,
+        "ks": 0.9333,
+        "cic_median": 0.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 1.45
+      },
+      {
+        "label": "BENIGN",
+        "feature": "PSH Flag Count",
+        "abs_cohens_d": 4.1345,
+        "cohens_d": 4.1345,
+        "ks": 0.9891,
+        "cic_median": 0.0,
+        "lab_median": 2.0,
+        "lab_outside_cic_range_pct": 98.91
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Init_Win_bytes_forward",
+        "abs_cohens_d": 3.8715,
+        "cohens_d": 3.8715,
+        "ks": 0.9659,
+        "cic_median": 119.0,
+        "lab_median": 65535.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Down/Up Ratio",
+        "abs_cohens_d": 2.3004,
+        "cohens_d": 2.3004,
+        "ks": 0.9787,
+        "cic_median": 1.0,
+        "lab_median": 2.1888887882232666,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "RST Flag Count",
+        "abs_cohens_d": 0.8303,
+        "cohens_d": 0.8303,
+        "ks": 0.0142,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Destination Port",
+        "abs_cohens_d": 0.4843,
+        "cohens_d": -0.4843,
+        "ks": 0.454,
+        "cic_median": 80.0,
+        "lab_median": 80.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Packet Length Min",
+        "abs_cohens_d": 0.4317,
+        "cohens_d": -0.4317,
+        "ks": 0.547,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow Duration",
+        "abs_cohens_d": 0.3836,
+        "cohens_d": -0.3836,
+        "ks": 0.3959,
+        "cic_median": 32774.0,
+        "lab_median": 16106.00927734375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd IAT Total",
+        "abs_cohens_d": 0.3742,
+        "cohens_d": -0.3742,
+        "ks": 0.6391,
+        "cic_median": 4.0,
+        "lab_median": 14858.484375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "URG Flag Count",
+        "abs_cohens_d": 0.3689,
+        "cohens_d": -0.3689,
+        "ks": 0.1197,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd IAT Total",
+        "abs_cohens_d": 0.3592,
+        "cohens_d": -0.3592,
+        "ks": 0.7218,
+        "cic_median": 3.0,
+        "lab_median": 14555.9306640625,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow IAT Max",
+        "abs_cohens_d": 0.317,
+        "cohens_d": -0.317,
+        "ks": 0.4555,
+        "cic_median": 31158.0,
+        "lab_median": 5829.930419921875,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd IAT Max",
+        "abs_cohens_d": 0.3042,
+        "cohens_d": -0.3042,
+        "ks": 0.6341,
+        "cic_median": 4.0,
+        "lab_median": 7014.512939453125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Idle Max",
+        "abs_cohens_d": 0.2881,
+        "cohens_d": -0.2881,
+        "ks": 0.1672,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Idle Mean",
+        "abs_cohens_d": 0.2867,
+        "cohens_d": -0.2867,
+        "ks": 0.1672,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd IAT Max",
+        "abs_cohens_d": 0.2793,
+        "cohens_d": -0.2793,
+        "ks": 0.7218,
+        "cic_median": 3.0,
+        "lab_median": 7105.589111328125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow IAT Std",
+        "abs_cohens_d": 0.2767,
+        "cohens_d": -0.2767,
+        "ks": 0.5213,
+        "cic_median": 147.80167,
+        "lab_median": 1720.2225952148438,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Packet Length Std",
+        "abs_cohens_d": 0.2764,
+        "cohens_d": 0.2764,
+        "ks": 0.7853,
+        "cic_median": 0.0,
+        "lab_median": 190.4567108154297,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd IAT Std",
+        "abs_cohens_d": 0.2756,
+        "cohens_d": -0.2756,
+        "ks": 0.6817,
+        "cic_median": 0.0,
+        "lab_median": 2301.7625732421875,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Idle Min",
+        "abs_cohens_d": 0.2748,
+        "cohens_d": -0.2748,
+        "ks": 0.1672,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Init_Win_bytes_backward",
+        "abs_cohens_d": 0.2541,
+        "cohens_d": -0.2541,
+        "ks": 0.6717,
+        "cic_median": -1.0,
+        "lab_median": 108.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd IAT Std",
+        "abs_cohens_d": 0.2453,
+        "cohens_d": -0.2453,
+        "ks": 0.7469,
+        "cic_median": 0.0,
+        "lab_median": 2158.23486328125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow Packets/s",
+        "abs_cohens_d": 0.2386,
+        "cohens_d": -0.2386,
+        "ks": 0.5059,
+        "cic_median": 86.80556,
+        "lab_median": 607.4390258789062,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow IAT Mean",
+        "abs_cohens_d": 0.2288,
+        "cohens_d": -0.2288,
+        "ks": 0.5267,
+        "cic_median": 14994.6,
+        "lab_median": 1829.173828125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Packets/s",
+        "abs_cohens_d": 0.2255,
+        "cohens_d": -0.2255,
+        "ks": 0.4998,
+        "cic_median": 49.163887,
+        "lab_median": 309.800048828125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd IAT Mean",
+        "abs_cohens_d": 0.2098,
+        "cohens_d": -0.2098,
+        "ks": 0.6341,
+        "cic_median": 4.0,
+        "lab_median": 3763.4969482421875,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd IAT Mean",
+        "abs_cohens_d": 0.1989,
+        "cohens_d": -0.1989,
+        "ks": 0.7218,
+        "cic_median": 3.0,
+        "lab_median": 3778.3681640625,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Average Packet Size",
+        "abs_cohens_d": 0.1917,
+        "cohens_d": -0.1917,
+        "ks": 0.5252,
+        "cic_median": 77.0,
+        "lab_median": 86.0999984741211,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Packets/s",
+        "abs_cohens_d": 0.1637,
+        "cohens_d": -0.1637,
+        "ks": 0.6057,
+        "cic_median": 26.915003,
+        "lab_median": 298.6008758544922,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Packet Length Variance",
+        "abs_cohens_d": 0.159,
+        "cohens_d": -0.159,
+        "ks": 0.7404,
+        "cic_median": 906.8,
+        "lab_median": 21100.08984375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Packet Length Max",
+        "abs_cohens_d": 0.1412,
+        "cohens_d": 0.1412,
+        "ks": 0.7878,
+        "cic_median": 90.0,
+        "lab_median": 497.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd IAT Min",
+        "abs_cohens_d": 0.1299,
+        "cohens_d": -0.1299,
+        "ks": 0.8184,
+        "cic_median": 3.0,
+        "lab_median": 1204.9674682617188,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd IAT Min",
+        "abs_cohens_d": 0.1289,
+        "cohens_d": -0.1289,
+        "ks": 0.9248,
+        "cic_median": 2.0,
+        "lab_median": 1535.0580444335938,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Packet Length Mean",
+        "abs_cohens_d": 0.1257,
+        "cohens_d": -0.1257,
+        "ks": 0.6139,
+        "cic_median": 82.0,
+        "lab_median": 118.19999694824219,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Avg Bwd Segment Size",
+        "abs_cohens_d": 0.1257,
+        "cohens_d": -0.1257,
+        "ks": 0.6139,
+        "cic_median": 82.0,
+        "lab_median": 118.19999694824219,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Active Max",
+        "abs_cohens_d": 0.1248,
+        "cohens_d": -0.1248,
+        "ks": 0.8371,
+        "cic_median": 0.0,
+        "lab_median": 16106.00927734375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Packet Length Mean",
+        "abs_cohens_d": 0.1215,
+        "cohens_d": -0.1215,
+        "ks": 0.6655,
+        "cic_median": 60.8,
+        "lab_median": 86.0999984741211,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Active Std",
+        "abs_cohens_d": 0.1172,
+        "cohens_d": -0.1172,
+        "ks": 0.095,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Idle Std",
+        "abs_cohens_d": 0.0902,
+        "cohens_d": -0.0902,
+        "ks": 0.0977,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Packet Length Max",
+        "abs_cohens_d": 0.0882,
+        "cohens_d": -0.0882,
+        "ks": 0.7232,
+        "cic_median": 41.0,
+        "lab_median": 176.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Packet Length Mean",
+        "abs_cohens_d": 0.0789,
+        "cohens_d": -0.0789,
+        "ks": 0.7001,
+        "cic_median": 38.0,
+        "lab_median": 53.599998474121094,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Avg Fwd Segment Size",
+        "abs_cohens_d": 0.0789,
+        "cohens_d": -0.0789,
+        "ks": 0.7001,
+        "cic_median": 38.0,
+        "lab_median": 53.599998474121094,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Subflow Fwd Bytes",
+        "abs_cohens_d": 0.0766,
+        "cohens_d": -0.0766,
+        "ks": 0.6907,
+        "cic_median": 68.0,
+        "lab_median": 156.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Active Mean",
+        "abs_cohens_d": 0.0708,
+        "cohens_d": -0.0708,
+        "ks": 0.8371,
+        "cic_median": 0.0,
+        "lab_median": 16106.00927734375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Packet Length Std",
+        "abs_cohens_d": 0.061,
+        "cohens_d": -0.061,
+        "ks": 0.7283,
+        "cic_median": 0.0,
+        "lab_median": 61.376216888427734,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Total Length of Fwd Packets",
+        "abs_cohens_d": 0.0597,
+        "cohens_d": -0.0597,
+        "ks": 0.7279,
+        "cic_median": 68.0,
+        "lab_median": 268.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow IAT Min",
+        "abs_cohens_d": 0.0547,
+        "cohens_d": -0.0547,
+        "ks": 0.6664,
+        "cic_median": 4.0,
+        "lab_median": 116.9443130493164,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Flow Bytes/s",
+        "abs_cohens_d": 0.0492,
+        "cohens_d": -0.0492,
+        "ks": 0.5826,
+        "cic_median": 4510.9634,
+        "lab_median": 52621.537109375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Packet Length Min",
+        "abs_cohens_d": 0.0466,
+        "cohens_d": -0.0466,
+        "ks": 0.5529,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Active Min",
+        "abs_cohens_d": 0.0343,
+        "cohens_d": -0.0343,
+        "ks": 0.8371,
+        "cic_median": 0.0,
+        "lab_median": 16106.00927734375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "ECE Flag Count",
+        "abs_cohens_d": 0.0171,
+        "cohens_d": -0.0171,
+        "ks": 0.0003,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Min Packet Length",
+        "abs_cohens_d": 0.0121,
+        "cohens_d": -0.0121,
+        "ks": 0.5557,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Max Packet Length",
+        "abs_cohens_d": 0.0118,
+        "cohens_d": 0.0118,
+        "ks": 0.7527,
+        "cic_median": 97.0,
+        "lab_median": 497.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "act_data_pkt_fwd",
+        "abs_cohens_d": 0.0075,
+        "cohens_d": -0.0075,
+        "ks": 0.3139,
+        "cic_median": 1.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Subflow Bwd Bytes",
+        "abs_cohens_d": 0.0072,
+        "cohens_d": -0.0072,
+        "ks": 0.7603,
+        "cic_median": 140.0,
+        "lab_median": 477.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Total Length of Bwd Packets",
+        "abs_cohens_d": 0.0072,
+        "cohens_d": -0.0072,
+        "ks": 0.7728,
+        "cic_median": 140.0,
+        "lab_median": 588.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd URG Flags",
+        "abs_cohens_d": 0.0068,
+        "cohens_d": -0.0068,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "CWE Flag Count",
+        "abs_cohens_d": 0.0068,
+        "cohens_d": -0.0068,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Total Fwd Packets",
+        "abs_cohens_d": 0.0067,
+        "cohens_d": -0.0067,
+        "ks": 0.7401,
+        "cic_median": 2.0,
+        "lab_median": 5.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Subflow Fwd Packets",
+        "abs_cohens_d": 0.0067,
+        "cohens_d": -0.0067,
+        "ks": 0.7401,
+        "cic_median": 2.0,
+        "lab_median": 5.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Total Backward Packets",
+        "abs_cohens_d": 0.0066,
+        "cohens_d": -0.0066,
+        "ks": 0.7434,
+        "cic_median": 2.0,
+        "lab_median": 5.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Subflow Bwd Packets",
+        "abs_cohens_d": 0.0066,
+        "cohens_d": -0.0066,
+        "ks": 0.7434,
+        "cic_median": 2.0,
+        "lab_median": 5.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "min_seg_size_forward",
+        "abs_cohens_d": 0.0034,
+        "cohens_d": 0.0034,
+        "ks": 0.4824,
+        "cic_median": 20.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Packet Length Std",
+        "abs_cohens_d": 0.0025,
+        "cohens_d": 0.0025,
+        "ks": 0.7404,
+        "cic_median": 30.11312,
+        "lab_median": 145.25869750976562,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Fwd Header Length",
+        "abs_cohens_d": 0.0024,
+        "cohens_d": 0.0024,
+        "ks": 0.7366,
+        "cic_median": 64.0,
+        "lab_median": 112.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "BENIGN",
+        "feature": "Bwd Header Length",
+        "abs_cohens_d": 0.0018,
+        "cohens_d": 0.0018,
+        "ks": 0.7479,
+        "cic_median": 40.0,
+        "lab_median": 112.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Min Packet Length",
+        "abs_cohens_d": 19.279,
+        "cohens_d": 19.279,
+        "ks": 1.0,
+        "cic_median": 0.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Packet Length Min",
+        "abs_cohens_d": 19.2577,
+        "cohens_d": 19.2577,
+        "ks": 1.0,
+        "cic_median": 0.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Packet Length Min",
+        "abs_cohens_d": 18.9761,
+        "cohens_d": 18.9761,
+        "ks": 1.0,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "SYN Flag Count",
+        "abs_cohens_d": 13.929,
+        "cohens_d": 13.929,
+        "ks": 0.9999,
+        "cic_median": 0.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 49.94
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Packet Length Mean",
+        "abs_cohens_d": 9.9848,
+        "cohens_d": 9.9848,
+        "ks": 0.9985,
+        "cic_median": 0.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Avg Fwd Segment Size",
+        "abs_cohens_d": 9.9848,
+        "cohens_d": 9.9848,
+        "ks": 0.9985,
+        "cic_median": 0.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "RST Flag Count",
+        "abs_cohens_d": 9.2662,
+        "cohens_d": 9.2662,
+        "ks": 0.8829,
+        "cic_median": 0.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 88.29
+      },
+      {
+        "label": "PortScan",
+        "feature": "PSH Flag Count",
+        "abs_cohens_d": 5.7015,
+        "cohens_d": -5.7015,
+        "ks": 0.833,
+        "cic_median": 1.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 4.07
+      },
+      {
+        "label": "PortScan",
+        "feature": "ACK Flag Count",
+        "abs_cohens_d": 5.4909,
+        "cohens_d": 5.4909,
+        "ks": 0.9995,
+        "cic_median": 0.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 49.94
+      },
+      {
+        "label": "PortScan",
+        "feature": "Init_Win_bytes_forward",
+        "abs_cohens_d": 3.6446,
+        "cohens_d": 3.6446,
+        "ks": 1.0,
+        "cic_median": 29200.0,
+        "lab_median": 65535.0,
+        "lab_outside_cic_range_pct": 100.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Packet Length Max",
+        "abs_cohens_d": 3.1244,
+        "cohens_d": 3.1244,
+        "ks": 0.9985,
+        "cic_median": 0.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Active Min",
+        "abs_cohens_d": 2.913,
+        "cohens_d": 2.913,
+        "ks": 0.9913,
+        "cic_median": 0.0,
+        "lab_median": 8707.046875,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Active Mean",
+        "abs_cohens_d": 2.7756,
+        "cohens_d": 2.7756,
+        "ks": 0.998,
+        "cic_median": 0.0,
+        "lab_median": 10299.9208984375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "FIN Flag Count",
+        "abs_cohens_d": 2.4698,
+        "cohens_d": 2.4698,
+        "ks": 0.2306,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 23.06
+      },
+      {
+        "label": "PortScan",
+        "feature": "Active Max",
+        "abs_cohens_d": 2.4595,
+        "cohens_d": 2.4595,
+        "ks": 0.998,
+        "cic_median": 0.0,
+        "lab_median": 10364.0556640625,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Down/Up Ratio",
+        "abs_cohens_d": 2.3431,
+        "cohens_d": -2.3431,
+        "ks": 0.9203,
+        "cic_median": 1.0,
+        "lab_median": 0.625,
+        "lab_outside_cic_range_pct": 1.48
+      },
+      {
+        "label": "PortScan",
+        "feature": "Total Fwd Packets",
+        "abs_cohens_d": 2.1261,
+        "cohens_d": 2.1261,
+        "ks": 0.4818,
+        "cic_median": 1.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Subflow Fwd Packets",
+        "abs_cohens_d": 2.1141,
+        "cohens_d": 2.1141,
+        "ks": 0.4818,
+        "cic_median": 1.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Total Backward Packets",
+        "abs_cohens_d": 1.8554,
+        "cohens_d": 1.8554,
+        "ks": 0.4947,
+        "cic_median": 1.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Subflow Bwd Packets",
+        "abs_cohens_d": 1.83,
+        "cohens_d": 1.83,
+        "ks": 0.4922,
+        "cic_median": 1.0,
+        "lab_median": 1.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Header Length",
+        "abs_cohens_d": 1.8089,
+        "cohens_d": 1.8089,
+        "ks": 0.4897,
+        "cic_median": 20.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow IAT Min",
+        "abs_cohens_d": 1.6298,
+        "cohens_d": 1.6298,
+        "ks": 0.9316,
+        "cic_median": 49.0,
+        "lab_median": 1098.8712158203125,
+        "lab_outside_cic_range_pct": 67.08
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Header Length",
+        "abs_cohens_d": 1.6255,
+        "cohens_d": 1.6255,
+        "ks": 0.4914,
+        "cic_median": 40.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd PSH Flags",
+        "abs_cohens_d": 1.3911,
+        "cohens_d": 1.3911,
+        "ks": 0.0776,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Packet Length Std",
+        "abs_cohens_d": 0.888,
+        "cohens_d": 0.888,
+        "ks": 0.2488,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Packet Length Mean",
+        "abs_cohens_d": 0.704,
+        "cohens_d": 0.704,
+        "ks": 0.9982,
+        "cic_median": 2.4,
+        "lab_median": 26.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Average Packet Size",
+        "abs_cohens_d": 0.599,
+        "cohens_d": 0.599,
+        "ks": 0.9982,
+        "cic_median": 3.0,
+        "lab_median": 26.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Total Length of Fwd Packets",
+        "abs_cohens_d": 0.5706,
+        "cohens_d": 0.5706,
+        "ks": 0.9985,
+        "cic_median": 0.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Packets/s",
+        "abs_cohens_d": 0.4795,
+        "cohens_d": -0.4795,
+        "ks": 0.9838,
+        "cic_median": 20000.0,
+        "lab_median": 246.22769165039062,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd Packets/s",
+        "abs_cohens_d": 0.4794,
+        "cohens_d": -0.4794,
+        "ks": 0.9933,
+        "cic_median": 20000.0,
+        "lab_median": 318.28076171875,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow Packets/s",
+        "abs_cohens_d": 0.4036,
+        "cohens_d": -0.4036,
+        "ks": 0.9919,
+        "cic_median": 40000.0,
+        "lab_median": 563.9147338867188,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "min_seg_size_forward",
+        "abs_cohens_d": 0.3765,
+        "cohens_d": -0.3765,
+        "ks": 0.4957,
+        "cic_median": 32.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd IAT Std",
+        "abs_cohens_d": 0.3293,
+        "cohens_d": 0.3293,
+        "ks": 0.2427,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Packet Length Mean",
+        "abs_cohens_d": 0.2456,
+        "cohens_d": 0.2456,
+        "ks": 0.9981,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Avg Bwd Segment Size",
+        "abs_cohens_d": 0.2456,
+        "cohens_d": 0.2456,
+        "ks": 0.9981,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd IAT Std",
+        "abs_cohens_d": 0.2312,
+        "cohens_d": 0.2312,
+        "ks": 0.1491,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "act_data_pkt_fwd",
+        "abs_cohens_d": 0.2263,
+        "cohens_d": 0.2263,
+        "ks": 0.0713,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Max Packet Length",
+        "abs_cohens_d": 0.1949,
+        "cohens_d": 0.1949,
+        "ks": 0.9979,
+        "cic_median": 6.0,
+        "lab_median": 32.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow Duration",
+        "abs_cohens_d": 0.1782,
+        "cohens_d": 0.1782,
+        "ks": 0.9849,
+        "cic_median": 50.0,
+        "lab_median": 10375.9765625,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow IAT Max",
+        "abs_cohens_d": 0.1724,
+        "cohens_d": 0.1724,
+        "ks": 0.9851,
+        "cic_median": 50.0,
+        "lab_median": 5215.16796875,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd IAT Max",
+        "abs_cohens_d": 0.1648,
+        "cohens_d": 0.1648,
+        "ks": 0.4906,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd IAT Total",
+        "abs_cohens_d": 0.1646,
+        "cohens_d": 0.1646,
+        "ks": 0.4919,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Active Std",
+        "abs_cohens_d": 0.1293,
+        "cohens_d": 0.1293,
+        "ks": 0.0123,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Idle Max",
+        "abs_cohens_d": 0.1256,
+        "cohens_d": 0.1256,
+        "ks": 0.0091,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Idle Mean",
+        "abs_cohens_d": 0.1242,
+        "cohens_d": 0.1242,
+        "ks": 0.0091,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Idle Min",
+        "abs_cohens_d": 0.1229,
+        "cohens_d": 0.1229,
+        "ks": 0.0091,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.37
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Packet Length Max",
+        "abs_cohens_d": 0.1109,
+        "cohens_d": 0.1109,
+        "ks": 0.9981,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow IAT Std",
+        "abs_cohens_d": 0.1066,
+        "cohens_d": 0.1066,
+        "ks": 0.4918,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow IAT Mean",
+        "abs_cohens_d": 0.097,
+        "cohens_d": 0.097,
+        "ks": 0.9937,
+        "cic_median": 50.0,
+        "lab_median": 2415.227783203125,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Init_Win_bytes_backward",
+        "abs_cohens_d": 0.0895,
+        "cohens_d": -0.0895,
+        "ks": 0.2383,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Total Length of Bwd Packets",
+        "abs_cohens_d": 0.0804,
+        "cohens_d": 0.0804,
+        "ks": 0.998,
+        "cic_median": 6.0,
+        "lab_median": 20.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Packet Length Std",
+        "abs_cohens_d": 0.08,
+        "cohens_d": 0.08,
+        "ks": 0.9954,
+        "cic_median": 2.309401,
+        "lab_median": 6.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Destination Port",
+        "abs_cohens_d": 0.0548,
+        "cohens_d": -0.0548,
+        "ks": 0.3449,
+        "cic_median": 3404.0,
+        "lab_median": 1080.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Subflow Fwd Bytes",
+        "abs_cohens_d": 0.0504,
+        "cohens_d": 0.0504,
+        "ks": 0.4204,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd IAT Mean",
+        "abs_cohens_d": 0.0498,
+        "cohens_d": 0.0498,
+        "ks": 0.4919,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd IAT Total",
+        "abs_cohens_d": 0.0434,
+        "cohens_d": 0.0434,
+        "ks": 0.4947,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Flow Bytes/s",
+        "abs_cohens_d": 0.043,
+        "cohens_d": -0.043,
+        "ks": 0.8757,
+        "cic_median": 137931.03,
+        "lab_median": 16583.3359375,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd IAT Max",
+        "abs_cohens_d": 0.0367,
+        "cohens_d": 0.0367,
+        "ks": 0.4947,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Packet Length Variance",
+        "abs_cohens_d": 0.0298,
+        "cohens_d": -0.0298,
+        "ks": 0.9954,
+        "cic_median": 5.3333335,
+        "lab_median": 36.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Subflow Bwd Bytes",
+        "abs_cohens_d": 0.0265,
+        "cohens_d": -0.0265,
+        "ks": 0.8797,
+        "cic_median": 6.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd Packet Length Std",
+        "abs_cohens_d": 0.0241,
+        "cohens_d": 0.0241,
+        "ks": 0.2386,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Idle Std",
+        "abs_cohens_d": 0.0231,
+        "cohens_d": 0.0231,
+        "ks": 0.0024,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd IAT Mean",
+        "abs_cohens_d": 0.02,
+        "cohens_d": 0.02,
+        "ks": 0.4947,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Bwd IAT Min",
+        "abs_cohens_d": 0.005,
+        "cohens_d": 0.005,
+        "ks": 0.4947,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd IAT Min",
+        "abs_cohens_d": 0.0015,
+        "cohens_d": 0.0015,
+        "ks": 0.4854,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "Fwd URG Flags",
+        "abs_cohens_d": 0.0,
+        "cohens_d": 0.0,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "URG Flag Count",
+        "abs_cohens_d": 0.0,
+        "cohens_d": 0.0,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "CWE Flag Count",
+        "abs_cohens_d": 0.0,
+        "cohens_d": 0.0,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      },
+      {
+        "label": "PortScan",
+        "feature": "ECE Flag Count",
+        "abs_cohens_d": 0.0,
+        "cohens_d": 0.0,
+        "ks": 0.0,
+        "cic_median": 0.0,
+        "lab_median": 0.0,
+        "lab_outside_cic_range_pct": 0.0
+      }
+    ]
+  },
+  "read_only_proof": {
+    "files": 100,
+    "changed": [],
+    "added": [],
+    "removed": []
+  },
+  "problems": [],
+  "verdict": "PASS"
+}

@@ -132,7 +132,9 @@ class TestTcpHandshake(unittest.TestCase):
 
     def test_windows_and_segments(self):
         self.assertEqual(self.v["Init_Win_bytes_forward"], 64240)
-        self.assertEqual(self.v["Init_Win_bytes_backward"], 65535)
+        # Backward windows were 65535 (SYN|ACK) then 1000 (ACK|FIN); CICFlowMeter
+        # keeps the LAST one, so 1000 is the expected value here.
+        self.assertEqual(self.v["Init_Win_bytes_backward"], 1000)
         self.assertEqual(self.v["act_data_pkt_fwd"], 1)  # only pkt 3 has payload
         self.assertAlmostEqual(self.v["min_seg_size_forward"], 20.0)
 
@@ -244,6 +246,98 @@ class TestScoreableGate(unittest.TestCase):
         self.assertEqual(len(got), 1)
         self.assertEqual(got[0]["Total Fwd Packets"], 1)
         self.assertEqual(got[0]["Total Backward Packets"], 1)
+
+
+class TestInitWinCicCompatibility(unittest.TestCase):
+    """Init_Win_bytes_forward/backward must match CICFlowMeter exactly.
+
+    The two directions are deliberately asymmetric, because CICFlowMeter's
+    BasicFlow.java is: firstPacket() sets Init_Win_bytes_forward once, while
+    addPacket() re-assigns Init_Win_bytes_backward on every backward packet, so
+    the value CICFlowMeter writes to CSV is the LAST backward window. Non-TCP
+    flows get CICFlowMeter's -1 marker rather than 0.
+
+    Regression guard for a real defect: reading the first backward packet gave
+    5840 where CICFlowMeter gives 92 on live lab flows.
+    """
+
+    def test_forward_is_first_forward_window(self):
+        packets = [
+            pkt(0.000, A, B, 12345, 443, flags=SYN, win=64240),
+            pkt(0.001, B, A, 443, 12345, flags=SYN | ACK, win=5840),
+            pkt(0.002, A, B, 12345, 443, plen=200, flags=ACK, win=100),
+            pkt(0.003, B, A, 443, 12345, flags=ACK, win=5000),
+        ]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], 64240)
+        self.assertNotEqual(v["Init_Win_bytes_forward"], 100)
+
+    def test_backward_is_last_backward_window(self):
+        packets = [
+            pkt(0.000, A, B, 12345, 443, flags=SYN, win=64240),
+            pkt(0.001, B, A, 443, 12345, flags=SYN | ACK, win=5840),
+            pkt(0.002, B, A, 443, 12345, flags=ACK, win=92),
+            pkt(0.003, B, A, 443, 12345, flags=ACK, win=92),
+        ]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_backward"], 92)
+        self.assertNotEqual(v["Init_Win_bytes_backward"], 5840)
+
+    def test_forward_stays_first_while_backward_moves_to_last(self):
+        packets = [
+            pkt(0.000, A, B, 12345, 443, flags=SYN, win=64240),
+            pkt(0.001, A, B, 12345, 443, flags=ACK, win=111),
+            pkt(0.002, B, A, 443, 12345, flags=SYN | ACK, win=5840),
+            pkt(0.003, B, A, 443, 12345, flags=ACK, win=777),
+        ]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], 64240)  # first forward
+        self.assertEqual(v["Init_Win_bytes_backward"], 777)   # last backward
+
+    def test_single_packet_per_direction_is_unchanged(self):
+        packets = [pkt(0.000, A, B, 12345, 443, flags=SYN, win=64240),
+                   pkt(0.001, B, A, 443, 12345, flags=SYN | ACK, win=65535)]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], 64240)
+        self.assertEqual(v["Init_Win_bytes_backward"], 65535)
+
+    def test_udp_flow_reports_minus_one(self):
+        packets = [pkt(0.0, A, B, 53000, 53, proto=17, plen=40, hlen=8),
+                   pkt(0.005, B, A, 53, 53000, proto=17, plen=80, hlen=8)]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], -1)
+        self.assertEqual(v["Init_Win_bytes_backward"], -1)
+
+    def test_icmp_flow_reports_minus_one(self):
+        packets = [pkt(0.0, A, B, 0, 0, proto=1, plen=64, hlen=8),
+                   pkt(0.01, B, A, 0, 0, proto=1, plen=64, hlen=8)]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], -1)
+        self.assertEqual(v["Init_Win_bytes_backward"], -1)
+
+    def test_minus_one_survives_into_the_model_vector(self):
+        packets = [pkt(0.0, A, B, 53000, 53, proto=17, plen=40, hlen=8),
+                   pkt(0.005, B, A, 53, 53000, proto=17, plen=80, hlen=8)]
+        vec = flow_with(packets).feature_vector()
+        i_f = FEATURE_ORDER.index("Init_Win_bytes_forward")
+        i_b = FEATURE_ORDER.index("Init_Win_bytes_backward")
+        self.assertEqual(vec.dtype, "float32")
+        self.assertEqual(vec[i_f], -1.0)
+        self.assertEqual(vec[i_b], -1.0)
+
+    def test_tcp_with_missing_backward_direction_keeps_default_zero(self):
+        # CICFlowMeter's backward field is only written when a backward packet
+        # arrives; with none it keeps its default 0 (NOT the non-TCP -1 marker).
+        v = flow_with([pkt(0.0, A, B, 12345, 443, flags=SYN, win=64240)]).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], 64240)
+        self.assertEqual(v["Init_Win_bytes_backward"], 0)
+
+    def test_zero_window_is_not_confused_with_missing(self):
+        packets = [pkt(0.0, A, B, 12345, 443, flags=SYN, win=0),
+                   pkt(0.01, B, A, 443, 12345, flags=SYN | ACK, win=0)]
+        v = flow_with(packets).to_features()
+        self.assertEqual(v["Init_Win_bytes_forward"], 0)
+        self.assertEqual(v["Init_Win_bytes_backward"], 0)
 
 
 if __name__ == "__main__":

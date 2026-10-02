@@ -42,6 +42,15 @@ URG = 0x20
 ECE = 0x40
 CWR = 0x80
 
+TCP_PROTO = 6
+
+# CICFlowMeter's "no TCP window available" marker. CICFlowMeter writes -1 for
+# any flow whose packets carry no TCP window (essentially every UDP/ICMP flow),
+# and the CIC models have seen that value during training, so live flows must
+# reproduce it. 0 is NOT a safe substitute: it is a legitimate on-wire window
+# and would collide with real zero-window packets.
+NO_TCP_WINDOW = -1
+
 # Tunable parameters matching CICFlowMeter's burst/subflow behaviour.
 # Active/Idle bursts and subflow splits are defined around these gaps.
 ACTIVE_TIMEOUT_S = 2.0
@@ -232,7 +241,7 @@ class Flow:
 
     def is_terminated(self):
         """True if the flow saw TCP termination flags (RST or FIN)."""
-        if self.proto != 6:
+        if self.proto != TCP_PROTO:
             return False
         return any(bool(p.flags & (RST | FIN)) for p in self._fwd + self._bwd)
 
@@ -334,8 +343,21 @@ class Flow:
         avg_bwd_seg = tot_b / nb if nb else 0.0
         down_up = tot_b / tot_f if tot_f else 0.0
 
-        init_win_f = f_fwd[0].win_size if f_fwd else 0
-        init_win_b = f_bwd[0].win_size if f_bwd else 0
+        if self.proto == TCP_PROTO:
+            # Forward is written once, from the first forward packet.
+            init_win_f = f_fwd[0].win_size if f_fwd else 0
+            # Asymmetric on purpose: CICFlowMeter sets Init_Win_bytes_forward once
+            # in firstPacket(), but re-assigns Init_Win_bytes_backward on *every*
+            # backward packet in addPacket() (BasicFlow.java:196). The value that
+            # survives to the CSV is therefore the LAST backward window, not the
+            # first - and the field keeps its default 0 when no backward packet
+            # was ever added. Matching that quirk is what keeps the feature
+            # in-distribution for the CIC-trained models.
+            init_win_b = f_bwd[-1].win_size if f_bwd else 0
+        else:
+            # Non-TCP: CICFlowMeter's reader writes -1 for every packet with no
+            # TCP window, so both directions surface as -1.
+            init_win_f = init_win_b = NO_TCP_WINDOW
         act_data_f = sum(1 for p in f_fwd if p.payload_len > 0)
         min_seg_f = float(min(fwd_len)) if fwd_len else 0.0
 

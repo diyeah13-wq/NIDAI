@@ -52,6 +52,15 @@ LAB_DIR = os.path.join(BASE_DIR, "data", "lab")
 RAW_GLOB = os.path.join(LAB_DIR, "raw", "*", "*.jsonl")
 MANIFEST_DIR = os.path.join(LAB_DIR, "manifests")
 
+
+def set_lab_dir(path):
+    """Repoint the verifier at a different lab root (--lab-dir)."""
+    global LAB_DIR, RAW_GLOB, MANIFEST_DIR
+    LAB_DIR = os.path.abspath(path) if os.path.isabs(path) \
+        else os.path.join(BASE_DIR, path)
+    RAW_GLOB = os.path.join(LAB_DIR, "raw", "*", "*.jsonl")
+    MANIFEST_DIR = os.path.join(LAB_DIR, "manifests")
+
 # The live gate, as implemented in src/live/flow_features.py (Stage A).
 GATE_MIN_FWD = 1
 GATE_MIN_BWD = 1
@@ -344,12 +353,17 @@ def main(argv=None):
                     help="which CIC split to compare against (default: %(default)s)")
     ap.add_argument("--holdout-frac", type=float, default=0.2,
                     help="fraction of runs reserved as holdout (default: %(default)s)")
+    ap.add_argument("--lab-dir", default="data/lab",
+                    help="lab root to verify (default: %(default)s)")
     ap.add_argument("--out", default=os.path.join("results", "metrics",
                                                   "stage13_lab_verification.json"))
     args = ap.parse_args(argv)
 
+    set_lab_dir(args.lab_dir)
+
     report = {"generated_at": datetime.datetime.now().astimezone().isoformat(),
               "cap": args.cap, "cic_reference": args.cic,
+              "lab_dir": os.path.relpath(LAB_DIR, BASE_DIR).replace("\\", "/"),
               "gate": {"min_fwd": GATE_MIN_FWD, "min_bwd": GATE_MIN_BWD}}
     problems = []
 

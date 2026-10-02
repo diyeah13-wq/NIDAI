@@ -72,6 +72,15 @@ LAB_DIR = os.path.join(BASE_DIR, "data", "lab")
 RAW_DIR = os.path.join(LAB_DIR, "raw")
 MANIFEST_DIR = os.path.join(LAB_DIR, "manifests")
 
+
+def set_lab_dir(path):
+    """Repoint all output paths at a different lab root (--lab-dir)."""
+    global LAB_DIR, RAW_DIR, MANIFEST_DIR
+    LAB_DIR = os.path.abspath(path) if os.path.isabs(path) \
+        else os.path.join(BASE_DIR, path)
+    RAW_DIR = os.path.join(LAB_DIR, "raw")
+    MANIFEST_DIR = os.path.join(LAB_DIR, "manifests")
+
 DEFAULT_TARGET = "192.168.56.101"
 DEFAULT_IFACE = "Ethernet 2"
 
@@ -750,6 +759,9 @@ def parse_args(argv=None):
                    help="print progress every 100 ports")
     p.add_argument("--list-scenarios", action="store_true",
                    help="list scenarios and exit")
+    p.add_argument("--lab-dir", default="data/lab",
+                   help="output root for raw/ + manifests/ "
+                        "(default: %(default)s)")
     p.add_argument("--dry-run", action="store_true",
                    help="print the plan without capturing or sending anything")
     return p.parse_args(argv)
@@ -757,6 +769,8 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
+
+    set_lab_dir(args.lab_dir)
 
     if args.list_scenarios:
         print("Available scenarios:\n")
